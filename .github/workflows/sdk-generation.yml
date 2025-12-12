@@ -21,15 +21,13 @@ jobs:
       - name: Clone SDK Repository
         env:
           TOKEN: ${{ secrets.SDK_PUBLISHER_TOKEN }}
-        run: |
-          git clone https://$TOKEN@github.com/EdGraph-OSS/csharp-sdk target
+        run: git clone https://$TOKEN@github.com/EdGraph-OSS/csharp-sdk target
+
+      - name: Go to SDK Repository
+        run: cd target
 
       - name: Generate file
         run: touch test-file.yaml
-
-      - name: Copy files
-        run: |
-          rsync -av --exclude='.git' ./ ./target/
 
       - name: Commit
         run: | 
