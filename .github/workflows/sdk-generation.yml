@@ -23,11 +23,10 @@ jobs:
           TOKEN: ${{ secrets.SDK_PUBLISHER_TOKEN }}
         run: git clone https://$TOKEN@github.com/EdGraph-OSS/csharp-sdk target
 
-      - name: Go to SDK Repository
-        run: cd target
-
       - name: Generate file
-        run: touch test-file.yaml
+        run: |
+          cd target
+          touch test-file.yaml
 
       - name: Commit
         run: | 
