@@ -8,11 +8,36 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout Current
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 18
-      - name: Install dependencies
-        run: npm install
+
+      - name: Clone SDK Repository
+        env:
+          TOKEN: ${{ secrets.SDK_PUBLISHER_TOKEN }}
+        run: |
+          git clone https://$TOKEN@github.com/EdGraph-OSS/csharp-sdk target
+
+      - name: Generate file
+        run: touch test-file.yaml
+
+      - name: Copy files
+        run: |
+          rsync -av --exclude='.git' ./ ./target/
+
+      - name: Commit
+        run: | 
+          cd target  
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git add .
+          git commit -m "Generate SDK"
+          git pull origin main --no-rebase --allow-unrelated-histories
+          git push origin main
