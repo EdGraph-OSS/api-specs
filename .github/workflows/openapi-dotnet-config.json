@@ -10,5 +10,5 @@
   "useHttpClientCreationMethod": true,
   "serializeBigDecimalAsString": false,
   "optionalEmitDefaultValues": true,
-  "optionalAddApiKeyAuthorization": false,
+  "optionalAddApiKeyAuthorization": false
 }

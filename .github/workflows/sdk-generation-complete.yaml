@@ -31,7 +31,7 @@ jobs:
             -i /specs/yaml/tenants-v1-swagger.yaml
             -g ${{ matrix.planguage.generator }}                  
             -o /github/workspace/sdks/${{ matrix.planguage.name }}
-            -c /github/workspace/openapi-${{ matrix.planguage.generator }}-config.yaml
+            -c /github/workspace/openapi-${{ matrix.planguage.generator }}-config.json
             --skip-validate-spec
       - name: List all files in Current Directory
         run: |
