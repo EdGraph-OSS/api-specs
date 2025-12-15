@@ -8,7 +8,7 @@ jobs:
   generate-client-sdk:
     runs-on: ubuntu-latest
     strategy: 
-      maxtrix: 
+      matrix: 
         planguage: 
           - name: "Csharp"
             generator: csharp
