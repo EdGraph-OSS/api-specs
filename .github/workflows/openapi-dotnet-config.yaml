@@ -1,0 +1,14 @@
+{
+  "packageName": "EdGraph.Forms.Client",
+  "targetFramework": "net8.0",
+  "packageVersion": "1.0.0",
+  "generateClientClasses": true,
+  "generateClientInterfaces": true,
+  "generateDtoTypes": true,
+  "generateApiDocumentation": true,
+  "generateModelDocumentation": true,
+  "useHttpClientCreationMethod": true,
+  "serializeBigDecimalAsString": false,
+  "optionalEmitDefaultValues": true,
+  "optionalAddApiKeyAuthorization": false,
+}

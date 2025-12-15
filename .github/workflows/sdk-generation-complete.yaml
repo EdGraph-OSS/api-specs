@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  generate-client-sdk:
+    runs-on: ubuntu-latest
+    strategy: 
+      maxtrix: 
+        planguage: 
+          - name: "Csharp"
+            generator: csharp
+    steps:
+      - name: ⚙️ Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: 🐳 Run OpenAPI Generator CLI
+        uses: docker://openapitools/openapi-generator-cli:v7.8.0
+        with:
+          args: >
+            generate
+            -i /specs/yaml/tenants-v1-swagger.yaml
+            -g ${{ matrix.planguage.generator }}                  
+            -o /github/workspace/sdks/${{ matrix.planguage.name }}
+            -c /github/workspace/openapi-${{ matrix.planguage.generator }}-config.yaml
+            --skip-validate-spec
+      - name: List all files in Current Directory
+        run: |
+          ls 
+        
