@@ -45,4 +45,6 @@ jobs:
       - name: List all files in Current Directory
         run: |
           ls 
+          cd sdks
+          ls
         
