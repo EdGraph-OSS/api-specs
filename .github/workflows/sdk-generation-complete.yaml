@@ -6,7 +6,7 @@ on:
 
 jobs:
   update-version-and-commit: 
-    uses: './.github/workflows/commit-changes.yaml'
+    uses: './.github/workflows/update-version-and-commit.yaml'
     if: github.actor != 'github-actions[bot]'
 
   generate-client-sdk:
