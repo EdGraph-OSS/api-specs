@@ -12,7 +12,7 @@ jobs:
         planguage: 
           - name: "csharp"
             generator: csharp
-            
+
           - name: typescript
             generator: typescript-axios
 
@@ -24,14 +24,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 🔎 Debug repository contents
+      - name: 🔎 Debug Working Directory Contents
         run: |
           echo "PWD:"
           pwd
           echo "ROOT FILES:"
           ls -la
           echo "SEARCH CONFIG FILE:"
-          find . -name "openapi-csharp-config.json"
+          find . -name "openapi-${{ matrix.planguage.name }}-config.json"
 
       - name: 🐳 Run OpenAPI Generator CLI for ${{ matrix.planguage.name }}
         uses: docker://openapitools/openapi-generator-cli:v7.8.0
