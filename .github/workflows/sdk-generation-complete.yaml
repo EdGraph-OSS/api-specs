@@ -12,10 +12,10 @@ jobs:
         planguage: 
           - name: "csharp"
             generator: csharp
-        planguage: 
+            
           - name: typescript
             generator: typescript-axios
-        planguage: 
+
           - name: python 
             generator: python 
     steps:
