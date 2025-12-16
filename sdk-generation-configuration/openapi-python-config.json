@@ -1,7 +1,7 @@
 {
   "packageName": "edgraph_platform_client",
   "projectName": "edgraph-platform-client",
-  "packageVersion": "1.0.0",
+  "packageVersion": "0.0.2",
   "gitUserId": "EdGraph-OSS",
   "gitRepoId": "python-sdk",
   "additionalProperties": {
