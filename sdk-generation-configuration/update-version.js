@@ -12,7 +12,7 @@ function updateVersion() {
     
     console.log("Updated EdGraph platform version: ", version.edgraphPlatformVersion)
     
-    fs.writeFileSync("config.json", config)
+    fs.writeFileSync(versionFile, config)
 
     updateAllConfigsToLatesVersion(config.edgraphPlatformVersion)
 }

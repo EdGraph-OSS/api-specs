@@ -5,7 +5,7 @@ const configFileTemplate = `openapi-{{language}}-config.json`
 
 function updateConfigVersion(filename, version) {
     const config = JSON.parse(fs.readFileSync(
-        filename,
+        path.join(process.cwd(), `sdk-generation-configuration/${filename}`),
         'utf8'))
 
     console.log('initial config', config)
@@ -19,7 +19,7 @@ function updateConfigVersion(filename, version) {
 
 function updateTypescriptConfigVersion(filename, version) {
     const config = JSON.parse(fs.readFileSync(
-        filename,
+        path.join(process.cwd(), `sdk-generation-configuration/${filename}`),
         'utf8'))
 
     console.log('initial config', config)
