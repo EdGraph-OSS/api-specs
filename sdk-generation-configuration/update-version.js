@@ -1,5 +1,5 @@
-import fs from 'fs'
-import { updateAllConfigsToLatesVersion } from './update-config-version'
+const fs = require('fs')
+const { updateAllConfigsToLatesVersion } = require('./update-config-version')
 
 function updateVersion() {
     const config = JSON.parse(fs.readFileSync('config.json'), "utf8")

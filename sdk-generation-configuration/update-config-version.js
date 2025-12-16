@@ -1,4 +1,4 @@
-import fs from 'fs'
+const fs = require('fs')
 
 const supportedLanguages = [ 'csharp', 'python', 'typescript' ]
 const configFileTemplate = `openapi-{{language}}-config.json`

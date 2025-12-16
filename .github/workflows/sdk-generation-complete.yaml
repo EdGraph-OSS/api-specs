@@ -13,6 +13,7 @@ jobs:
     if: github.actor != 'github-actions[bot]'
 
   generate-client-sdk:
+    needs: update-version-and-commit
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     strategy: 
