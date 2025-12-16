@@ -1,4 +1,5 @@
 const fs = require('fs')
+const path = require('path')
 
 const supportedLanguages = [ 'csharp', 'python', 'typescript' ]
 const configFileTemplate = `openapi-{{language}}-config.json`
