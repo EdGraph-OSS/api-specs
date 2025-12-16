@@ -14,6 +14,7 @@
     "packageCompany": "EdWire",
     "nullableReferenceTypes": true,
     "library": "generichost",
+    "packageTitle": "EdGraph Platform Client",
     "packageDescription": "EdGraph Platform Client SDK"
   }
 }
