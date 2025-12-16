@@ -10,8 +10,14 @@ jobs:
     strategy: 
       matrix: 
         planguage: 
-          - name: "Csharp"
+          - name: "csharp"
             generator: csharp
+        planguage: 
+          - name: typescript
+            generator: typescript-axios
+        planguage: 
+          - name: python 
+            generator: python 
     steps:
       - name: ⚙️ Checkout Repository
         uses: actions/checkout@v4
@@ -27,12 +33,7 @@ jobs:
           echo "SEARCH CONFIG FILE:"
           find . -name "openapi-csharp-config.json"
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: 🐳 Run OpenAPI Generator CLI
+      - name: 🐳 Run OpenAPI Generator CLI for ${{ matrix.planguage.name }}
         uses: docker://openapitools/openapi-generator-cli:v7.8.0
         with:
           args: >
@@ -40,7 +41,7 @@ jobs:
             -i /github/workspace/specs/yaml/tenants-v1-swagger.yaml
             -g ${{ matrix.planguage.generator }}                  
             -o /github/workspace/sdks/${{ matrix.planguage.name }}
-            -c /github/workspace/sdk-generation-configuration/openapi-${{ matrix.planguage.generator }}-config.json
+            -c /github/workspace/sdk-generation-configuration/openapi-${{ matrix.planguage.name }}-config.json
             --skip-validate-spec
       - name: List all files in Current Directory
         run: |

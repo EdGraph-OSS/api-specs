@@ -1,0 +1,18 @@
+{
+  "npmName": "@edgraph/platform-client",
+  "npmVersion": "1.0.0",
+  "supportsES6": true,
+  "withSeparateModelsAndApi": true,
+  "modelPackage": "models",
+  "apiPackage": "api",
+  "generateApiDocumentation": true,
+  "generateModelDocumentation": true,
+  "gitUserId": "EdGraph-OSS",
+  "gitRepoId": "typescript-sdk",
+  "additionalProperties": {
+    "npmAuthor": "EdGraph",
+    "npmRepository": "https://github.com/EdGraph-OSS/typescript-sdk",
+    "npmDescription": "EdGraph Platform Client SDK",
+    "useSingleRequestParameter": true
+  }
+}
