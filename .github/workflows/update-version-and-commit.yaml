@@ -1,0 +1,38 @@
+name: Commit changes
+
+on:
+  workflow_call:
+
+jobs:
+  update-version-and-commit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: "Update EdGraph Platform SDK Version"
+        run: |
+          node ./sdk-generation-configuration/update-version.js
+
+      - name: "Commit Version Update"
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          if [[ -n "$(git status --porcelain sdks/)" ]]; then
+            git add sdks/
+            git commit -m "chore(sdk): regenerate clients"
+            git push origin HEAD:${{ github.ref_name }}
+          else
+            echo "No SDK changes to commit"
+          fi  
+
