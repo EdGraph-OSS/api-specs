@@ -33,7 +33,7 @@ function updateTypescriptConfigVersion(filename, version) {
 }
 
 function updateAllConfigsToLatesVersion(version) {
-    for (const language in supportedLanguages) {
+    for (const language of supportedLanguages) {
         console.log("Language", language, version)
 
         const stringVersion = `${version.major}.${version.minor}.${version.patch}`
