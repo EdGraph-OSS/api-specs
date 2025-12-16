@@ -28,11 +28,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          if [[ -n "$(git status --porcelain sdks/)" ]]; then
-            git add sdks/
-            git commit -m "chore(sdk): regenerate clients"
+          if [[ -n "$(git status --porcelain sdk-generation-configuration)" ]]; then
+            git add sdk-generation-configuration
+            git commit -m "chore(sdk-generation-configuration): update version"
             git push origin HEAD:${{ github.ref_name }}
           else
-            echo "No SDK changes to commit"
+            echo "No Version changes to commit"
           fi  
 
