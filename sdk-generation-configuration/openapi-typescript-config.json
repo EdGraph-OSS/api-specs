@@ -1,6 +1,6 @@
 {
   "npmName": "@edgraph/platform-client",
-  "npmVersion": "0.0.3",
+  "npmVersion": "0.0.4",
   "supportsES6": true,
   "withSeparateModelsAndApi": true,
   "modelPackage": "models",
