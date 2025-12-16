@@ -1,5 +1,6 @@
 const fs = require('fs')
 const { updateAllConfigsToLatesVersion } = require('./update-config-version')
+const path = require('path')
 
 function updateVersion() {
     const versionFile = path.join(process.cwd(), 'version.json')
