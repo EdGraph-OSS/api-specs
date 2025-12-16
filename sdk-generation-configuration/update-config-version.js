@@ -14,7 +14,7 @@ function updateConfigVersion(filename, version) {
     
     console.log('updated config', config)
 
-    fs.writeFileSync(filename, config)
+    fs.writeFileSync(filename, JSON.stringify(config, null, 2), 'utf8')
 }
 
 function updateTypescriptConfigVersion(filename, version) {
@@ -28,7 +28,7 @@ function updateTypescriptConfigVersion(filename, version) {
 
     console.log('updated config', config)
 
-    fs.writeFileSync(filename, config)
+    fs.writeFileSync(filename, JSON.stringify(config, null, 2), 'utf8')
 }
 
 function updateAllConfigsToLatesVersion(version) {
