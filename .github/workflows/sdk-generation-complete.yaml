@@ -24,6 +24,14 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Clone ${{ matrix.planguage.name }} SDK Repository
+        env:
+          TOKEN: ${{ secrets.SDK_PUBLISHER_TOKEN }}
+        run: |
+          git clone https://$TOKEN@github.com/EdGraph-OSS/${{ matrix.planguage.name }}-sdk target
+          cd target
+          rm -rf ./src
+
       - name: 🔎 Debug Working Directory Contents
         run: |
           echo "PWD:"
@@ -40,27 +48,22 @@ jobs:
             generate
             -i /github/workspace/specs/yaml/tenants-v1-swagger.yaml
             -g ${{ matrix.planguage.generator }}                  
-            -o /github/workspace/sdks/${{ matrix.planguage.name }}
+            -o /github/workspace/target/src/${{ matrix.planguage.name }}
             -c /github/workspace/sdk-generation-configuration/openapi-${{ matrix.planguage.name }}-config.json
             --skip-validate-spec
 
       - name: List all files in Current Directory
         run: |
           ls 
-          cd sdks
+          cd target
           ls
-
-      - name: Clone ${{ matrix.planguage.name }} SDK Repository
-        env:
-          TOKEN: ${{ secrets.SDK_PUBLISHER_TOKEN }}
-        run: git clone https://$TOKEN@github.com/EdGraph-OSS/${{ matrix.planguage.name }}-sdk target
 
       - name: Generate file
         run: |
           cd target
           touch ${{ matrix.planguage.name }}-file.yaml
 
-      - name: Commit & Push
+      - name: Commit & Push to ${{ matrix.planguage.name }} SDK Repository
         run: | 
           cd target 
           git config user.name "github-actions[bot]"
