@@ -2,7 +2,8 @@ const fs = require('fs')
 const { updateAllConfigsToLatesVersion } = require('./update-config-version')
 
 function updateVersion() {
-    const version = JSON.parse(fs.readFileSync('./version.json'), "utf8")
+    const versionFile = path.join(process.cwd(), 'version.json')
+    const version = JSON.parse(fs.readFileSync(versionFile), "utf8")
     
     console.log("EdGraph platform version: ", version.edgraphPlatformVersion)
     
