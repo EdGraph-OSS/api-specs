@@ -5,8 +5,9 @@ const supportedLanguages = [ 'csharp', 'python', 'typescript' ]
 const configFileTemplate = `openapi-{{language}}-config.json`
 
 function updateConfigVersion(filename, version) {
+    const filePath = path.join(process.cwd(), `sdk-generation-configuration/${filename}`)
     const config = JSON.parse(fs.readFileSync(
-        path.join(process.cwd(), `sdk-generation-configuration/${filename}`),
+        filePath,
         'utf8'))
 
     console.log('initial config', config)
@@ -15,12 +16,13 @@ function updateConfigVersion(filename, version) {
     
     console.log('updated config', config)
 
-    fs.writeFileSync(filename, JSON.stringify(config, null, 2), 'utf8')
+    fs.writeFileSync(filePath, JSON.stringify(config, null, 2), 'utf8')
 }
 
 function updateTypescriptConfigVersion(filename, version) {
+    const filePath = path.join(process.cwd(), `sdk-generation-configuration/${filename}`)
     const config = JSON.parse(fs.readFileSync(
-        path.join(process.cwd(), `sdk-generation-configuration/${filename}`),
+        filePath,
         'utf8'))
 
     console.log('initial config', config)
@@ -29,7 +31,7 @@ function updateTypescriptConfigVersion(filename, version) {
 
     console.log('updated config', config)
 
-    fs.writeFileSync(filename, JSON.stringify(config, null, 2), 'utf8')
+    fs.writeFileSync(filePath, JSON.stringify(config, null, 2), 'utf8')
 }
 
 function updateAllConfigsToLatesVersion(version) {
@@ -40,6 +42,7 @@ function updateAllConfigsToLatesVersion(version) {
         console.log('string version', stringVersion)
         
         const filename = configFileTemplate.replace("{{language}}", language)
+        console.log('filename', filename)
 
         if (language === 'typescript') 
             updateTypescriptConfigVersion(filename, stringVersion)

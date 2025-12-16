@@ -33,6 +33,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Print Config file
+        run:  jq . ./sdk-generation-configuration/openapi-csharp-config.json
+
       - name: Clone ${{ matrix.planguage.name }} SDK Repository
         env:
           TOKEN: ${{ secrets.SDK_PUBLISHER_TOKEN }}
