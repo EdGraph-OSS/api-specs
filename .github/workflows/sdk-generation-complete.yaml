@@ -43,9 +43,31 @@ jobs:
             -o /github/workspace/sdks/${{ matrix.planguage.name }}
             -c /github/workspace/sdk-generation-configuration/openapi-${{ matrix.planguage.name }}-config.json
             --skip-validate-spec
+
       - name: List all files in Current Directory
         run: |
           ls 
           cd sdks
           ls
+
+      - name: Clone ${{ matrix.planguage.name }} SDK Repository
+        env:
+          TOKEN: ${{ secrets.SDK_PUBLISHER_TOKEN }}
+        run: git clone https://$TOKEN@github.com/EdGraph-OSS/${{ matrix.planguage.name }}-sdk target
+
+      - name: Generate file
+        run: |
+          cd target
+          touch ${{ matrix.planguage.name }}-file.yaml
+
+      - name: Commit & Push
+        run: | 
+          cd target 
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git add .
+          git commit -m "Generate SDK"
+          git pull origin main --no-rebase --allow-unrelated-histories
+          git push origin main
         

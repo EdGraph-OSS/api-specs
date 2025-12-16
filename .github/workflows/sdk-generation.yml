@@ -28,7 +28,7 @@ jobs:
           cd target
           touch test-file.yaml
 
-      - name: Commit
+      - name: Commit & Push
         run: | 
           cd target 
           git config user.name "github-actions[bot]"
