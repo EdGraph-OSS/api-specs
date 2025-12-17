@@ -69,7 +69,7 @@ jobs:
             generate
             -i /github/workspace/specs/yaml/all-v1-swagger.yaml
             -g ${{ matrix.planguage.generator }}                  
-            -o /github/workspace/target/src/
+            -o /github/workspace/target/
             -c /github/workspace/sdk-generation-configuration/openapi-${{ matrix.planguage.name }}-config.json
             --skip-validate-spec
 
