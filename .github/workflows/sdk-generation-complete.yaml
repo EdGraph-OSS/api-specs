@@ -84,7 +84,7 @@ jobs:
           cd target
           touch ${{ matrix.planguage.name }}-file.yaml
 
-      - name: Commit & Push to ${{ matrix.planguage.name }} SDK Repository
+      - name: 🚀 Commit & Push to ${{ matrix.planguage.name }} SDK Repository 
         run: | 
           cd target 
           git config user.name "github-actions[bot]"
