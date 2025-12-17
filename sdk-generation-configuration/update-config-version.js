@@ -34,6 +34,21 @@ function updateTypescriptConfigVersion(filename, version) {
     fs.writeFileSync(filePath, JSON.stringify(config, null, 2), 'utf8')
 }
 
+function updatePhpConfigVersion(filename, version) {
+    const filePath = path.join(process.cwd(), `sdk-generation-configuration/${filename}`)
+    const config = JSON.parse(fs.readFileSync(
+        filePath,
+        'utf8'))
+
+    console.log('initial config', config)
+
+    config.artifactVersion = version 
+
+    console.log('updated config', config)
+
+    fs.writeFileSync(filePath, JSON.stringify(config, null, 2), 'utf8')
+}
+
 function updateAllConfigsToLatesVersion(version) {
     for (const language of supportedLanguages) {
         console.log("Language", language, version)
@@ -46,6 +61,8 @@ function updateAllConfigsToLatesVersion(version) {
 
         if (language === 'typescript') 
             updateTypescriptConfigVersion(filename, stringVersion)
+        if (language === 'php')
+            updatePhpConfigVersion(filename, stringVersion)
         else 
             updateConfigVersion(filename, stringVersion)
     }
