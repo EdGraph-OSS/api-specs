@@ -22,14 +22,14 @@ jobs:
           - name: "csharp"
             generator: csharp
 
-        #  - name: php
-        #    generator: php 
+          - name: php
+            generator: php 
 
-        #  - name: typescript
-        #    generator: typescript-axios
+          - name: typescript
+            generator: typescript-axios
 
-        #  - name: python 
-        #    generator: python 
+          - name: python 
+            generator: python 
 
     steps:
       - name: ⚙️ Checkout Repository
