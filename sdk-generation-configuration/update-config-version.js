@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const supportedLanguages = [ 'csharp', 'python', 'typescript' ]
+const supportedLanguages = [ 'csharp', 'python', 'typescript', 'php' ]
 const configFileTemplate = `openapi-{{language}}-config.json`
 
 function updateConfigVersion(filename, version) {
