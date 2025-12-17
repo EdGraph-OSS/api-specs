@@ -79,11 +79,6 @@ jobs:
           cd target
           ls
 
-      - name: ⚡ Generate file
-        run: |
-          cd target
-          touch ${{ matrix.planguage.name }}-file.yaml
-
       - name: 🚀 Commit & Push to ${{ matrix.planguage.name }} SDK Repository 
         run: | 
           cd target 
