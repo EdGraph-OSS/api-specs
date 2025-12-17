@@ -37,15 +37,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Pull latest changes 
+      - name: 🔄 Pull latest changes 
         run: |
           git fetch origin main 
           git reset --hard origin/main
 
-      - name: Print Config file
-        run:  jq . ./sdk-generation-configuration/openapi-csharp-config.json
+      - name: 📄 Print Config file
+        run:  jq . ./sdk-generation-configuration/openapi-${{ matrix.planguage.name }}-config.json
 
-      - name: Clone ${{ matrix.planguage.name }} SDK Repository
+      - name: 🧬 Clone ${{ matrix.planguage.name }} SDK Repository
         env:
           TOKEN: ${{ secrets.SDK_PUBLISHER_TOKEN }}
         run: |
@@ -79,7 +79,7 @@ jobs:
           cd target
           ls
 
-      - name: Generate file
+      - name: ⚡ Generate file
         run: |
           cd target
           touch ${{ matrix.planguage.name }}-file.yaml
