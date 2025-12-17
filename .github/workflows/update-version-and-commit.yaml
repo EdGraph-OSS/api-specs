@@ -22,8 +22,9 @@ jobs:
       - name: "Update EdGraph Platform SDK Version"
         run: |
           node ./sdk-generation-configuration/update-version.js
+          node ./read-version.js
 
-      - name: "Commit Version Update"
+      - name: "Commit Version Update: ${{ env.version }}"
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
