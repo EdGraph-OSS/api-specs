@@ -67,7 +67,7 @@ jobs:
         with:
           args: >
             generate
-            -i /github/workspace/specs/yaml/all-v1-swagger.yaml
+            -i /github/workspace/dev/openapi/v3/yaml/all-v1-openapi.yaml
             -g ${{ matrix.planguage.generator }}                  
             -o /github/workspace/target/
             -c /github/workspace/sdk-generation-configuration/openapi-${{ matrix.planguage.name }}-config.json
