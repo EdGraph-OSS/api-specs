@@ -1,5 +1,5 @@
 {
-  "npmName": "@edgraph/platform-client",
+  "npmName": "@edgraph-oss/platform-client",
   "npmVersion": "0.0.8",
   "supportsES6": true,
   "withSeparateModelsAndApi": true,
