@@ -1,7 +1,7 @@
 {
   "packageName": "EdGraph.Platform.Client",
   "targetFramework": "net8.0",
-  "packageVersion": "0.0.9",
+  "packageVersion": "0.0.10",
   "generateApiDocumentation": true,
   "generateModelDocumentation": true,
   "serializeBigDecimalAsString": false,
