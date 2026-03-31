@@ -22746,6 +22746,77 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
+  '/tenants/{tenantId}/observations/settings/available-staffclassifications':
+    get:
+      tags:
+        - Observation Settings
+      summary: Get Paginated Available Forms
+      operationId: GetPaginatedStaffClassifications
+      parameters:
+        - name: tenantId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: pageIndex
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: pageSize
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+            default: 10
+        - name: orderBy
+          in: query
+          description: ''
+          schema:
+            type: string
+            default: ''
+        - name: filter
+          in: query
+          description: ''
+          schema:
+            type: string
+            default: ''
+      responses:
+        '401':
+          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '403':
+          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '500':
+          description: An unhandled error occurred on the server.See the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '200':
+          description: The requested resource was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentityApi.StaffClassification.V1.GetStaffClassificationsResponse'
+        '400':
+          description: Bad Request. The request was invalid and cannot be completed. See the response body for specific validation errors. This will typically be an issue with the query parameters or the request body values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
   '/tenants/{tenantId}/observations/settings/personas':
     get:
       tags:
@@ -26643,6 +26714,8 @@ paths:
                   type: boolean
                 IdentityRequired:
                   type: boolean
+                State:
+                  type: string
             encoding:
               File:
                 style: form
@@ -26663,6 +26736,8 @@ paths:
               RolesRequired:
                 style: form
               IdentityRequired:
+                style: form
+              State:
                 style: form
       responses:
         '401':
@@ -26973,6 +27048,8 @@ paths:
                   type: boolean
                 RolesRequired:
                   type: boolean
+                State:
+                  type: string
             encoding:
               File:
                 style: form
@@ -26991,6 +27068,8 @@ paths:
               IdentityRequired:
                 style: form
               RolesRequired:
+                style: form
+              State:
                 style: form
       responses:
         '401':
@@ -35549,6 +35628,9 @@ components:
         identityRequired:
           type: boolean
           nullable: true
+        state:
+          type: string
+          nullable: true
       additionalProperties: false
       description: Entities
     AnalyticsApi.Reports.V1.AnalyticsReportDataset:
@@ -37496,6 +37578,8 @@ components:
           format: int32
         component:
           nullable: true
+        visibilityCondition:
+          $ref: '#/components/schemas/EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.Forms.QuestionVisibilityConditionDto'
       additionalProperties: false
     EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Requests.Forms.CreateQuestionValidationRequestDto:
       type: object
@@ -37549,6 +37633,8 @@ components:
           format: int32
         component:
           nullable: true
+        visibilityCondition:
+          $ref: '#/components/schemas/EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.Forms.QuestionVisibilityConditionDto'
       additionalProperties: false
     EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Requests.Forms.UpdateQuestionValidationRequestDto:
       type: object
@@ -38322,6 +38408,8 @@ components:
           format: int32
         component:
           nullable: true
+        visibilityCondition:
+          $ref: '#/components/schemas/EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.Forms.QuestionVisibilityConditionDto'
       additionalProperties: false
     EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.Forms.QuestionResponseDtoPaginatedItemsViewModel:
       type: object
@@ -38351,6 +38439,31 @@ components:
         maxLength:
           type: integer
           format: int32
+          nullable: true
+      additionalProperties: false
+    EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.Forms.QuestionVisibilityConditionDto:
+      type: object
+      properties:
+        logic:
+          type: string
+          nullable: true
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.Forms.QuestionVisibilityRuleDto'
+          nullable: true
+      additionalProperties: false
+    EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.Forms.QuestionVisibilityRuleDto:
+      type: object
+      properties:
+        fieldId:
+          type: string
+          nullable: true
+        operator:
+          type: string
+          nullable: true
+        value:
+          type: string
           nullable: true
       additionalProperties: false
     EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.Role:
@@ -39562,9 +39675,6 @@ components:
       type: object
       properties:
         role:
-          type: string
-          nullable: true
-        description:
           type: string
           nullable: true
         assignedPersonaIdentifiers:
@@ -45814,9 +45924,14 @@ components:
     EvaluationApi.Evaluations.V1.OrganizationDiscriminator:
       enum:
         - Unknown
-        - StateEducationAgency
+        - EducationOrganizationNetwork
+        - EducationServiceCenter
         - LocalEducationAgency
+        - OrganizationDepartment
+        - Other
+        - PostSecondaryInstitution
         - School
+        - StateEducationAgency
       type: string
     EvaluationApi.Evaluations.V1.OrganizationIdentifierType:
       enum:
@@ -46007,6 +46122,8 @@ components:
         component:
           type: string
           nullable: true
+        visibilityCondition:
+          $ref: '#/components/schemas/FormApi.Questions.V1.QuestionVisibilityCondition'
       additionalProperties: false
     FormApi.Forms.V1.CreateFullQuestionValidationRequest:
       type: object
@@ -46285,6 +46402,8 @@ components:
         component:
           type: string
           nullable: true
+        visibilityCondition:
+          $ref: '#/components/schemas/FormApi.Questions.V1.QuestionVisibilityCondition'
       additionalProperties: false
     FormApi.Forms.V1.UpdateFullQuestionValidationRequest:
       type: object
@@ -46375,6 +46494,32 @@ components:
           type: string
           nullable: true
         tenantId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    FormApi.Questions.V1.QuestionVisibilityCondition:
+      type: object
+      properties:
+        logic:
+          type: string
+          nullable: true
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormApi.Questions.V1.QuestionVisibilityRule'
+          nullable: true
+          readOnly: true
+      additionalProperties: false
+    FormApi.Questions.V1.QuestionVisibilityRule:
+      type: object
+      properties:
+        fieldId:
+          type: string
+          nullable: true
+        operator:
+          type: string
+          nullable: true
+        value:
           type: string
           nullable: true
       additionalProperties: false
