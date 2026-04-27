@@ -1,7 +1,7 @@
 {
   "invokerPackage": "EdGraph\\PlatformClient",
   "packageName": "edgraph-platform-client",
-  "artifactVersion": "0.0.36",
+  "artifactVersion": "0.0.37",
   "phpNamespace": "EdGraph\\Platform\\Client",
   "packagePath": "./",
   "sortParamsByRequiredFlag": true,
