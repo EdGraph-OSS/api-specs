@@ -1,6 +1,6 @@
 {
   "npmName": "@edgraph-oss/platform-client",
-  "npmVersion": "0.0.38",
+  "npmVersion": "0.0.39",
   "supportsES6": true,
   "withSeparateModelsAndApi": true,
   "modelPackage": "models",
@@ -15,5 +15,5 @@
     "npmDescription": "EdGraph Platform Client SDK",
     "useSingleRequestParameter": true
   },
-  "packageVersion": "0.0.38"
+  "packageVersion": "0.0.39"
 }
