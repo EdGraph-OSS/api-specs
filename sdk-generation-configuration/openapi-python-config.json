@@ -2,13 +2,13 @@
   "packageName": "edgraph_platform_client",
   "projectName": "edgraph-platform-client",
   "packageVersion": "0.0.40",
+  "library": "httpx",
   "gitUserId": "EdGraph-OSS",
   "gitRepoId": "python-sdk",
   "additionalProperties": {
     "packageAuthor": "EdGraph",
     "packageCompany": "EdWire",
     "packageDescription": "EdGraph Platform Client SDK",
-    "library": "urllib3",
     "useOneOfDiscriminatorLookup": true
   }
 }
