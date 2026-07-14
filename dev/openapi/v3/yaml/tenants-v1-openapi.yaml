@@ -7905,6 +7905,9 @@ components:
         useStaffEdOrgContactAssociationForEmails:
           type: boolean
           nullable: true
+        ignoreEndDates:
+          type: boolean
+          nullable: true
       additionalProperties: false
     DataSyncApi.EdFiRosterSync.V1.EdFiRosterSyncJobProvider:
       enum:
@@ -8642,6 +8645,8 @@ components:
           type: boolean
         useStaffEdOrgContactAssociationForEmails:
           type: boolean
+        ignoreEndDates:
+          type: boolean
       additionalProperties: false
     EdGraph.HttpAggregators.Tenant.Api.Services.EdFiRosterSync.JobCreatedResult:
       type: object
@@ -8728,6 +8733,8 @@ components:
         error:
           type: string
           nullable: true
+        statusCode:
+          $ref: '#/components/schemas/System.Net.HttpStatusCode'
       additionalProperties: false
     EdGraph.HttpAggregators.Tenant.Api.Services.OnboardingSteps.EdFiDataModel:
       type: object
@@ -10946,6 +10953,70 @@ components:
           type: string
           nullable: true
       additionalProperties: { }
+    System.Net.HttpStatusCode:
+      enum:
+        - Continue
+        - SwitchingProtocols
+        - Processing
+        - EarlyHints
+        - OK
+        - Created
+        - Accepted
+        - NonAuthoritativeInformation
+        - NoContent
+        - ResetContent
+        - PartialContent
+        - MultiStatus
+        - AlreadyReported
+        - IMUsed
+        - Ambiguous
+        - Moved
+        - Redirect
+        - RedirectMethod
+        - NotModified
+        - UseProxy
+        - Unused
+        - TemporaryRedirect
+        - PermanentRedirect
+        - BadRequest
+        - Unauthorized
+        - PaymentRequired
+        - Forbidden
+        - NotFound
+        - MethodNotAllowed
+        - NotAcceptable
+        - ProxyAuthenticationRequired
+        - RequestTimeout
+        - Conflict
+        - Gone
+        - LengthRequired
+        - PreconditionFailed
+        - RequestEntityTooLarge
+        - RequestUriTooLong
+        - UnsupportedMediaType
+        - RequestedRangeNotSatisfiable
+        - ExpectationFailed
+        - MisdirectedRequest
+        - UnprocessableEntity
+        - Locked
+        - FailedDependency
+        - UpgradeRequired
+        - PreconditionRequired
+        - TooManyRequests
+        - RequestHeaderFieldsTooLarge
+        - UnavailableForLegalReasons
+        - InternalServerError
+        - NotImplemented
+        - BadGateway
+        - ServiceUnavailable
+        - GatewayTimeout
+        - HttpVersionNotSupported
+        - VariantAlsoNegotiates
+        - InsufficientStorage
+        - LoopDetected
+        - NotExtended
+        - NetworkAuthenticationRequired
+      type: string
     TenantApi.Integrations.V1.CreateIntegrationRequest:
       type: object
       properties:
