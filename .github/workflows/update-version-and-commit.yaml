@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
 
     steps:
       - uses: actions/checkout@v7
@@ -25,15 +26,25 @@ jobs:
           node ./.github/workflows/read-version.js
 
       - name: "Commit Version Update: ${{ env.version }}"
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           if [[ -n "$(git status --porcelain sdk-generation-configuration)" ]]; then
+            # Direct pushes to the default branch are blocked by the branch ruleset
+            # (PR required, no approvals; GitHub does not allow github-actions as a
+            # bypass actor). Ship the bump through a PR and merge it immediately.
+            BRANCH="chore/sdk-version-bump-${{ github.run_id }}"
+            git checkout -b "$BRANCH"
             git add sdk-generation-configuration
             git commit -m "chore(sdk-generation-configuration): update version"
-            git push origin HEAD:${{ github.ref_name }}
+            git push origin "$BRANCH"
+            gh pr create --base "${{ github.ref_name }}" --head "$BRANCH" \
+              --title "chore(sdk-generation-configuration): update version ${{ env.version }}" \
+              --body "Automated SDK version bump (run ${{ github.run_id }})."
+            gh pr merge "$BRANCH" --squash --delete-branch
           else
             echo "No Version changes to commit"
-          fi  
-
+          fi
