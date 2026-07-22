@@ -10,14 +10,12 @@ permissions:
 jobs:
   update-version-and-commit: 
     uses: './.github/workflows/update-version-and-commit.yaml'
-    if: github.actor != 'github-actions[bot]'
-    permissions:
-      contents: write
-      pull-requests: write
+    if: github.actor != 'github-actions[bot]' && github.actor != 'edgraph-api-specs-publisher[bot]'
+    secrets: inherit
 
   generate-client-sdk:
     needs: update-version-and-commit
-    if: github.actor != 'github-actions[bot]'
+    if: github.actor != 'github-actions[bot]' && github.actor != 'edgraph-api-specs-publisher[bot]'
     runs-on: ubuntu-latest
     strategy: 
       matrix: 
@@ -48,11 +46,20 @@ jobs:
       - name: 📄 Print Config file
         run:  jq . ./sdk-generation-configuration/openapi-${{ matrix.planguage.name }}-config.json
 
+      - name: Mint publisher app token for ${{ matrix.planguage.name }}-sdk
+        id: sdk-app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.PUBLISHER_APP_ID }}
+          private-key: ${{ secrets.PUBLISHER_APP_PRIVATE_KEY }}
+          owner: EdGraph-OSS
+          repositories: ${{ matrix.planguage.name }}-sdk
+
       - name: 🧬 Clone ${{ matrix.planguage.name }} SDK Repository
         env:
-          TOKEN: ${{ secrets.SDK_PUBLISHER_TOKEN }}
+          TOKEN: ${{ steps.sdk-app-token.outputs.token }}
         run: |
-          git clone https://$TOKEN@github.com/EdGraph-OSS/${{ matrix.planguage.name }}-sdk target
+          git clone https://x-access-token:$TOKEN@github.com/EdGraph-OSS/${{ matrix.planguage.name }}-sdk target
           cd target
           rm -rf ./src
 
@@ -85,8 +92,8 @@ jobs:
       - name: 🚀 Commit & Push to ${{ matrix.planguage.name }} SDK Repository 
         run: | 
           cd target 
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "edgraph-api-specs-publisher[bot]"
+          git config user.email "edgraph-api-specs-publisher[bot]@users.noreply.github.com"
           git fetch origin main
           git add .
           git commit -m "Generate SDK"
