@@ -3897,6 +3897,10 @@ paths:
                   type: string
                 Enabled:
                   type: boolean
+                RemoveBackground:
+                  type: boolean
+                RemoveLogo:
+                  type: boolean
             encoding:
               LogoFile:
                 style: form
@@ -3905,6 +3909,10 @@ paths:
               BrandName:
                 style: form
               Enabled:
+                style: form
+              RemoveBackground:
+                style: form
+              RemoveLogo:
                 style: form
       responses:
         '401':
@@ -8733,6 +8741,8 @@ components:
         error:
           type: string
           nullable: true
+        statusCode:
+          $ref: '#/components/schemas/System.Net.HttpStatusCode'
       additionalProperties: false
     EdGraph.HttpAggregators.Tenant.Api.Services.OnboardingSteps.EdFiDataModel:
       type: object
@@ -10951,6 +10961,70 @@ components:
           type: string
           nullable: true
       additionalProperties: { }
+    System.Net.HttpStatusCode:
+      enum:
+        - Continue
+        - SwitchingProtocols
+        - Processing
+        - EarlyHints
+        - OK
+        - Created
+        - Accepted
+        - NonAuthoritativeInformation
+        - NoContent
+        - ResetContent
+        - PartialContent
+        - MultiStatus
+        - AlreadyReported
+        - IMUsed
+        - Ambiguous
+        - Moved
+        - Redirect
+        - RedirectMethod
+        - NotModified
+        - UseProxy
+        - Unused
+        - TemporaryRedirect
+        - PermanentRedirect
+        - BadRequest
+        - Unauthorized
+        - PaymentRequired
+        - Forbidden
+        - NotFound
+        - MethodNotAllowed
+        - NotAcceptable
+        - ProxyAuthenticationRequired
+        - RequestTimeout
+        - Conflict
+        - Gone
+        - LengthRequired
+        - PreconditionFailed
+        - RequestEntityTooLarge
+        - RequestUriTooLong
+        - UnsupportedMediaType
+        - RequestedRangeNotSatisfiable
+        - ExpectationFailed
+        - MisdirectedRequest
+        - UnprocessableEntity
+        - Locked
+        - FailedDependency
+        - UpgradeRequired
+        - PreconditionRequired
+        - TooManyRequests
+        - RequestHeaderFieldsTooLarge
+        - UnavailableForLegalReasons
+        - InternalServerError
+        - NotImplemented
+        - BadGateway
+        - ServiceUnavailable
+        - GatewayTimeout
+        - HttpVersionNotSupported
+        - VariantAlsoNegotiates
+        - InsufficientStorage
+        - LoopDetected
+        - NotExtended
+        - NetworkAuthenticationRequired
+      type: string
     TenantApi.Integrations.V1.CreateIntegrationRequest:
       type: object
       properties:

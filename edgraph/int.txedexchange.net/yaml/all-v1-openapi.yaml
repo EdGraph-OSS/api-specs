@@ -2342,6 +2342,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
+  '/clients/{clientId}/branding':
+    get:
+      tags:
+        - Client Branding
+      summary: "Public (unauthenticated) read of a client's branding for the sign-in and other pre-auth\r\nsurfaces (Azure DevOps #17086). Returns only render fields + the override flag — never secrets,\r\nstorage internals, or other client configuration."
+      description: "Unauthenticated by design (branding is shown before login). An unknown client returns a\r\ndisabled default rather than 404, so the endpoint cannot be used as a client-existence oracle.\r\nThe response is cacheable so downstream CDNs/browsers absorb most traffic; rate limiting is\r\nexpected at the gateway."
+      operationId: GetClientBrandingAsync
+      parameters:
+        - name: clientId
+          in: path
+          description: The OAuth client id (already URL-decoded by routing).
+          required: true
+          schema:
+            type: string
+      responses:
+        '500':
+          description: An unhandled error occurred on the server. See the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '200':
+          description: The client's branding (or a disabled default for an unknown client).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.ClientBrandingResponse'
   '/tenants/{tenantId}/oneroster/instances/{instanceId}/clients/{clientId}/regeneratesecret':
     put:
       tags:
@@ -32084,6 +32111,10 @@ paths:
                   type: string
                 Enabled:
                   type: boolean
+                RemoveBackground:
+                  type: boolean
+                RemoveLogo:
+                  type: boolean
             encoding:
               LogoFile:
                 style: form
@@ -32092,6 +32123,10 @@ paths:
               BrandName:
                 style: form
               Enabled:
+                style: form
+              RemoveBackground:
+                style: form
+              RemoveLogo:
                 style: form
       responses:
         '401':
@@ -42381,6 +42416,8 @@ components:
         error:
           type: string
           nullable: true
+        statusCode:
+          $ref: '#/components/schemas/System.Net.HttpStatusCode'
       additionalProperties: false
     EdGraph.HttpAggregators.Tenant.Api.Services.OnboardingSteps.EdFiDataModel:
       type: object
@@ -42818,6 +42855,25 @@ components:
         type:
           $ref: '#/components/schemas/ApplicationApi.Application.V1.UrlType'
       additionalProperties: false
+    EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.ClientBrandingResponse:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        brandName:
+          type: string
+          nullable: true
+        logoUrl:
+          type: string
+          nullable: true
+        backgroundUrl:
+          type: string
+          nullable: true
+        allowTenantToOverride:
+          type: boolean
+          description: 'When false, this client''s branding overrides the tenant''s on the sign-in page.'
+      additionalProperties: false
+      description: "Public, render-only projection of a client's branding (Azure DevOps #17086) returned by the\r\nunauthenticated GET /clients/{clientId}/branding endpoint. Intentionally minimal — it carries only\r\nthe fields a sign-in / pre-auth surface needs to render, plus the override flag so the caller can\r\napply client-vs-tenant precedence itself. It never exposes secrets, storage internals\r\n(blob/container names), or any other client configuration."
     EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.ConnectionEdFiResponse:
       type: object
       properties:
@@ -52560,6 +52616,70 @@ components:
         - StateEducationAgency
         - AssessmentProvider
         - ServiceProvider
+      type: string
+    System.Net.HttpStatusCode:
+      enum:
+        - Continue
+        - SwitchingProtocols
+        - Processing
+        - EarlyHints
+        - OK
+        - Created
+        - Accepted
+        - NonAuthoritativeInformation
+        - NoContent
+        - ResetContent
+        - PartialContent
+        - MultiStatus
+        - AlreadyReported
+        - IMUsed
+        - Ambiguous
+        - Moved
+        - Redirect
+        - RedirectMethod
+        - NotModified
+        - UseProxy
+        - Unused
+        - TemporaryRedirect
+        - PermanentRedirect
+        - BadRequest
+        - Unauthorized
+        - PaymentRequired
+        - Forbidden
+        - NotFound
+        - MethodNotAllowed
+        - NotAcceptable
+        - ProxyAuthenticationRequired
+        - RequestTimeout
+        - Conflict
+        - Gone
+        - LengthRequired
+        - PreconditionFailed
+        - RequestEntityTooLarge
+        - RequestUriTooLong
+        - UnsupportedMediaType
+        - RequestedRangeNotSatisfiable
+        - ExpectationFailed
+        - MisdirectedRequest
+        - UnprocessableEntity
+        - Locked
+        - FailedDependency
+        - UpgradeRequired
+        - PreconditionRequired
+        - TooManyRequests
+        - RequestHeaderFieldsTooLarge
+        - UnavailableForLegalReasons
+        - InternalServerError
+        - NotImplemented
+        - BadGateway
+        - ServiceUnavailable
+        - GatewayTimeout
+        - HttpVersionNotSupported
+        - VariantAlsoNegotiates
+        - InsufficientStorage
+        - LoopDetected
+        - NotExtended
+        - NetworkAuthenticationRequired
       type: string
     TenantApi.Integrations.V1.CreateIntegrationProductRequest:
       type: object
