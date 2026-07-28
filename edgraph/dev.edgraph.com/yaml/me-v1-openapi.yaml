@@ -635,6 +635,56 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
+    put:
+      tags:
+        - My Settings
+      summary: 'Create or update (upsert) a User-scope setting, addressed by the SettingTypeId in the body'
+      operationId: SetMySetting
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Requests.Settings.SetSettingBodyRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Requests.Settings.SetSettingBodyRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Requests.Settings.SetSettingBodyRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Requests.Settings.SetSettingBodyRequest'
+      responses:
+        '401':
+          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '403':
+          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '500':
+          description: An unhandled error occurred on the server.See the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SettingsApi.Settings.V1.SetSettingResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
   /me/tenants:
     get:
       tags:
@@ -729,6 +779,24 @@ components:
           type: string
           nullable: true
         settingTypeId:
+          type: string
+          nullable: true
+        applicationId:
+          type: string
+          nullable: true
+        value:
+          nullable: true
+      additionalProperties: false
+    EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Requests.Settings.SetSettingBodyRequest:
+      type: object
+      properties:
+        settingTypeId:
+          type: string
+          nullable: true
+        provider:
+          type: string
+          nullable: true
+        code:
           type: string
           nullable: true
         applicationId:
@@ -1273,6 +1341,13 @@ components:
             $ref: '#/components/schemas/SettingsApi.Settings.V1.SettingMessage'
           nullable: true
           readOnly: true
+      additionalProperties: false
+    SettingsApi.Settings.V1.SetSettingResponse:
+      type: object
+      properties:
+        settingId:
+          type: string
+          nullable: true
       additionalProperties: false
     SettingsApi.Settings.V1.SettingMessage:
       type: object
