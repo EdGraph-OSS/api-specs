@@ -1,0 +1,633 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Me Api",
+    "description": "Me Api - v2.0",
+    "version": "v2.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.qa.edgraph.com/tenant"
+    }
+  ],
+  "paths": {
+    "/v2/me/tenants/{tenantId}": {
+      "get": {
+        "tags": [
+          "My Profile"
+        ],
+        "summary": "Get the tenant associated to the user.",
+        "operationId": "GetMyTenant",
+        "parameters": [
+          {
+            "name": "tenantId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An unhandled error occurred on the server.See the response body for details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "The requested resource was successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdentityApi.User.V2.TenantMeProfile"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The resource could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/me": {
+      "get": {
+        "tags": [
+          "My Profile"
+        ],
+        "summary": "Get the profile of the user that is currently logged in.",
+        "operationId": "GetMyProfile",
+        "responses": {
+          "401": {
+            "description": "Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An unhandled error occurred on the server.See the response body for details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "The requested resource was successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdentityApi.User.V2.UserMeProfile"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The resource could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/me/tenants/{tenantId}/licenses": {
+      "get": {
+        "tags": [
+          "My Tenants"
+        ],
+        "summary": "Search the user's licenses.",
+        "operationId": "SearchMyLicenses",
+        "parameters": [
+          {
+            "name": "tenantId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An unhandled error occurred on the server.See the response body for details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "The requested resource was successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdentityApi.User.V2.UserMeTenantsResponsePaginatedItemsViewModel"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The resource could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/me/tenants": {
+      "get": {
+        "tags": [
+          "My Tenants"
+        ],
+        "summary": "Searches tenants associated to the user.",
+        "operationId": "SearchMyTenants",
+        "parameters": [
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An unhandled error occurred on the server.See the response body for details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "The requested resource was successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdentityApi.User.V2.UserMeTenantsResponsePaginatedItemsViewModel"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The resource could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "EdGraph.Common.Errors.Core.ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "details": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          },
+          "extensions": {
+            "type": "object",
+            "additionalProperties": {
+              "nullable": true
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "IdentityApi.User.V2.TenantMeProfile": {
+        "type": "object",
+        "properties": {
+          "tenantId": {
+            "type": "string",
+            "nullable": true
+          },
+          "tenantTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "readOnly": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "organizationIdentifier": {
+            "type": "string",
+            "nullable": true
+          },
+          "organizationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "readOnly": true
+          },
+          "licenseCount": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "seoaaCount": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "sectionCount": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "branding": {
+            "$ref": "#/components/schemas/TenantApi.Tenant.V1.TenantBrandingResponse"
+          }
+        },
+        "additionalProperties": false
+      },
+      "IdentityApi.User.V2.UserExtension": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "IdentityApi.User.V2.UserMeProfile": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "tenantCount": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "extensions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IdentityApi.User.V2.UserExtension"
+            },
+            "nullable": true,
+            "readOnly": true
+          },
+          "selectedTenant": {
+            "$ref": "#/components/schemas/IdentityApi.User.V2.TenantMeProfile"
+          },
+          "platformRole": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "IdentityApi.User.V2.UserMeTenantsResponse": {
+        "type": "object",
+        "properties": {
+          "pageIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IdentityApi.User.V2.TenantMeProfile"
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "IdentityApi.User.V2.UserMeTenantsResponsePaginatedItemsViewModel": {
+        "type": "object",
+        "properties": {
+          "pageIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IdentityApi.User.V2.UserMeTenantsResponse"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TenantApi.Tenant.V1.TenantBrandingBackground": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "blobName": {
+            "type": "string",
+            "nullable": true
+          },
+          "containerName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TenantApi.Tenant.V1.TenantBrandingLogo": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "blobName": {
+            "type": "string",
+            "nullable": true
+          },
+          "containerName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TenantApi.Tenant.V1.TenantBrandingResponse": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "brandName": {
+            "type": "string",
+            "nullable": true
+          },
+          "logo": {
+            "$ref": "#/components/schemas/TenantApi.Tenant.V1.TenantBrandingLogo"
+          },
+          "background": {
+            "$ref": "#/components/schemas/TenantApi.Tenant.V1.TenantBrandingBackground"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "oauth2": {
+        "type": "oauth2",
+        "description": "Use bearer token generated from an OpenId server",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "http://localhost:5305/connect/token",
+            "scopes": {
+              "https://api.edgraph.com/auth/tenant": "EdGraph Platform - Tenant Api"
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "oauth2": [
+        "https://api.edgraph.com/auth/tenant"
+      ]
+    }
+  ]
+}

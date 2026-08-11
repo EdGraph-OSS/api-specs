@@ -1607,6 +1607,124 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+  '/tenants/{tenantId}/analytics/reports/{reportId}/access':
+    get:
+      tags:
+        - Reports
+      summary: Retrieves the audience-targeting (Manage Access) configuration for a report.
+      operationId: GetReportAccessAsync
+      parameters:
+        - name: tenantId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: reportId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '401':
+          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '403':
+          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+        '500':
+          description: An unhandled error occurred on the server.See the response body for details.
+        '200':
+          description: The requested resource was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.ReportAccessResponseDto'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+        '400':
+          description: Bad Request. The request was invalid and cannot be completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+    put:
+      tags:
+        - Reports
+      summary: Updates the audience-targeting (Manage Access) configuration for a report.
+      operationId: UpdateReportAccessAsync
+      parameters:
+        - name: tenantId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: reportId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Requests.ReportAccessRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Requests.ReportAccessRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Requests.ReportAccessRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Requests.ReportAccessRequest'
+      responses:
+        '401':
+          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '403':
+          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+        '500':
+          description: An unhandled error occurred on the server.See the response body for details.
+        '200':
+          description: The requested resource was successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsApi.Reports.V1.ReportIdResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+        '400':
+          description: Bad Request. The request was invalid and cannot be completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
   '/tenants/{tenantId}/analytics/reports/{reportId}':
     delete:
       tags:
@@ -1813,7 +1931,8 @@ paths:
     get:
       tags:
         - Reports
-      summary: Retrieves the PBIX for any report in the list in order to download
+      summary: Retrieves the PBIX for any report in the list in order to download.
+      description: "Admin-only. This resolves the PowerBI artifact straight from its report/group ids, so it\r\ncannot apply the report's audience targeting the way the list and get-by-id paths do.\r\nRestricting it to Analytics.Admin — the role that bypasses audience targeting anyway —\r\nkeeps a non-admin from downloading the source of a report they are not granted."
       operationId: DownloadReportAsync
       parameters:
         - name: tenantId
@@ -2137,6 +2256,72 @@ paths:
                 $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
         '400':
           description: Bad Request. The request was invalid and cannot be completed. See the response body for specific validation errors. This will typically be an issue with the query parameters or the request body values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+  '/tenants/{tenantId}/analytics/users':
+    get:
+      tags:
+        - Reports
+      summary: 'Searchable, paginated list of tenant users for the Manage Access "specific users" picker.'
+      operationId: GetAnalyticsTenantUsersAsync
+      parameters:
+        - name: tenantId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: pageSize
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+            default: 20
+        - name: pageIndex
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: orderBy
+          in: query
+          description: ''
+          schema:
+            type: string
+            default: ''
+        - name: filter
+          in: query
+          description: ''
+          schema:
+            type: string
+            default: ''
+      responses:
+        '401':
+          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '403':
+          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+        '500':
+          description: An unhandled error occurred on the server.See the response body for details.
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentityApi.User.V1.UserListResponsePaginatedItemsViewModel'
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -3026,6 +3211,49 @@ components:
         properties:
           nullable: true
       additionalProperties: false
+    EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Requests.ReportAccessRequest:
+      type: object
+      properties:
+        targetAudience:
+          type: string
+          nullable: true
+        staffClassifications:
+          type: array
+          items:
+            type: string
+          description: Targeted EdFi staff classifications (`namespace#codeValue`).
+          nullable: true
+        users:
+          type: array
+          items:
+            type: string
+          nullable: true
+      additionalProperties: false
+      description: "Payload for setting a report's audience targeting. EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Requests.ReportAccessRequest.TargetAudience is one of\r\n\"AnyoneInTenant\", \"UsersWithRoleInTenant\", or \"SpecificUsersInTenant\"."
+    EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.ReportAccessResponseDto:
+      type: object
+      properties:
+        tenantId:
+          type: string
+          nullable: true
+        reportId:
+          type: string
+          nullable: true
+        targetAudience:
+          type: string
+          nullable: true
+        staffClassifications:
+          type: array
+          items:
+            type: string
+          nullable: true
+        users:
+          type: array
+          items:
+            type: string
+          nullable: true
+      additionalProperties: false
+      description: "A report's audience targeting, returned with EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.ReportAccessResponseDto.TargetAudience as a stable\r\nstring (\"AnyoneInTenant\" | \"UsersWithRoleInTenant\" | \"SpecificUsersInTenant\") so the client\r\ndoes not depend on proto enum serialization."
     EdfiAdminApi.EdfiAdmin.V1.EdFiConnection:
       type: object
       properties:
@@ -3552,6 +3780,235 @@ components:
           type: string
           nullable: true
         azureServerElasticPoolName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    IdentityApi.User.V1.ComputedLicense:
+      type: object
+      properties:
+        applicationId:
+          type: string
+          nullable: true
+        applicationName:
+          type: string
+          nullable: true
+        applicationRole:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentityApi.User.V1.ComputedLicenseApplicationRole'
+          nullable: true
+          readOnly: true
+        applicationTenantId:
+          type: string
+          nullable: true
+        assignedLicenses:
+          type: integer
+          format: int32
+          nullable: true
+        isTenantSubscribed:
+          type: boolean
+          nullable: true
+        isUserLicensed:
+          type: boolean
+          nullable: true
+        numberOfLicenses:
+          type: integer
+          format: int32
+          nullable: true
+        subscriptionTenantId:
+          type: string
+          nullable: true
+        tenantSubscriptionActualEndDateTime:
+          type: string
+          nullable: true
+        tenantSubscriptionEndDateTime:
+          type: string
+          nullable: true
+        tenantSubscriptionId:
+          type: string
+          nullable: true
+        tenantSubscriptionStartDateTime:
+          type: string
+          nullable: true
+        deletedAt:
+          type: string
+          nullable: true
+        status:
+          $ref: '#/components/schemas/IdentityApi.User.V1.LicenseStatus'
+      additionalProperties: false
+    IdentityApi.User.V1.ComputedLicenseApplicationRole:
+      type: object
+      properties:
+        role:
+          type: string
+          nullable: true
+        isAssigned:
+          type: boolean
+          nullable: true
+        displayName:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        sortOrder:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+    IdentityApi.User.V1.EducationOrganization:
+      type: object
+      properties:
+        educationOrganizationId:
+          type: integer
+          format: int32
+        shortNameOfInstitution:
+          type: string
+          nullable: true
+        nameOfInstitution:
+          type: string
+          nullable: true
+        staffClassifications:
+          type: array
+          items:
+            type: string
+          nullable: true
+          readOnly: true
+        source:
+          type: string
+          nullable: true
+      additionalProperties: false
+    IdentityApi.User.V1.LicenseStatus:
+      enum:
+        - Unknown
+        - Active
+        - Expired
+      type: string
+    IdentityApi.User.V1.Tenant:
+      type: object
+      properties:
+        tenantId:
+          type: string
+          nullable: true
+        status:
+          $ref: '#/components/schemas/IdentityApi.User.V1.TenantStatus'
+        source:
+          $ref: '#/components/schemas/IdentityApi.User.V1.TenantSource'
+        roles:
+          type: array
+          items:
+            type: string
+          nullable: true
+          readOnly: true
+        educationOrganizations:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentityApi.User.V1.EducationOrganization'
+          nullable: true
+          readOnly: true
+          deprecated: true
+        licenses:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentityApi.User.V1.ComputedLicense'
+          nullable: true
+          readOnly: true
+        organizationName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    IdentityApi.User.V1.TenantSource:
+      enum:
+        - Unknown
+        - Manual
+        - PartnershipSync
+        - EdFiSync
+      type: string
+    IdentityApi.User.V1.TenantStatus:
+      enum:
+        - Unknown
+        - Active
+        - Inactive
+      type: string
+    IdentityApi.User.V1.UserListResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+          nullable: true
+        userName:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        tenantCount:
+          type: integer
+          format: int32
+        tenants:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentityApi.User.V1.Tenant'
+          nullable: true
+          readOnly: true
+        createdBy:
+          type: string
+          nullable: true
+        createdDateTime:
+          type: string
+          nullable: true
+        lastModifiedBy:
+          type: string
+          nullable: true
+        lastModifiedDateTime:
+          type: string
+          nullable: true
+        logins:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentityApi.User.V1.UserLogin'
+          nullable: true
+          readOnly: true
+        source:
+          type: string
+          nullable: true
+        lastLoginDateTime:
+          type: string
+          nullable: true
+        mfaCompleted:
+          type: boolean
+      additionalProperties: false
+    IdentityApi.User.V1.UserListResponsePaginatedItemsViewModel:
+      type: object
+      properties:
+        pageIndex:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        count:
+          type: integer
+          format: int64
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentityApi.User.V1.UserListResponse'
+          nullable: true
+      additionalProperties: false
+    IdentityApi.User.V1.UserLogin:
+      type: object
+      properties:
+        loginProvider:
+          type: string
+          nullable: true
+        providerDisplayName:
           type: string
           nullable: true
       additionalProperties: false
