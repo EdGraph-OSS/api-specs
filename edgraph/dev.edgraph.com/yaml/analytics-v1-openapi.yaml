@@ -1931,7 +1931,8 @@ paths:
     get:
       tags:
         - Reports
-      summary: Retrieves the PBIX for any report in the list in order to download
+      summary: Retrieves the PBIX for any report in the list in order to download.
+      description: "Admin-only. This resolves the PowerBI artifact straight from its report/group ids, so it\r\ncannot apply the report's audience targeting the way the list and get-by-id paths do.\r\nRestricting it to Analytics.Admin — the role that bypasses audience targeting anyway —\r\nkeeps a non-admin from downloading the source of a report they are not granted."
       operationId: DownloadReportAsync
       parameters:
         - name: tenantId
