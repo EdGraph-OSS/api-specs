@@ -1,0 +1,46 @@
+# Lint configuration for the EdGraph OpenAPI descriptions.
+#
+# These descriptions are generated from the services, so this file is a quality
+# gate on that output rather than a style guide for hand-authored YAML. It is
+# deliberately non-blocking today: documentation-coverage rules are warnings, so
+# CI reports the gap without failing a build that was already going to ship.
+#
+# To ratchet later, move a rule from `warn` to `error` once its count reaches
+# zero — that locks in the progress without ever failing on legacy debt.
+
+extends:
+  - recommended
+
+plugins:
+  - './plugins/normalize-environment.js'
+
+# Applied by `redocly bundle`, not by `lint`. Bundle before generating the SDKs
+# so the clients stop shipping a localhost token URL, and point the docs site at
+# the same plugin so the reference and the clients agree.
+decorators:
+  edgraph/normalize-environment:
+    # Leave unset to derive login.<host> from each description's own server,
+    # which keeps every environment correct without a per-environment config.
+    # Set explicitly if the identity provider does not follow that pattern.
+    tokenUrl: ''
+
+rules:
+  # --- Documentation coverage -------------------------------------------
+  # Summaries are largely in place; operation descriptions and tag-level
+  # framing are the gap these rules track.
+  operation-description: warn
+  tag-description: warn
+  parameter-description: warn
+  operation-summary: warn
+
+  # --- Contract hygiene --------------------------------------------------
+  operation-operationId: warn
+  operation-operationId-unique: error
+  operation-2xx-response: warn
+  no-duplicated-tag-names: warn
+
+  # --- Known generator noise ---------------------------------------------
+  # The descriptions are emitted from C# and carry these by construction.
+  # Silenced rather than left to drown the signal from the rules above.
+  nullable-type-sibling: off
+  no-invalid-media-type-examples: off

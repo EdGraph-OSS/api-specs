@@ -1,0 +1,86 @@
+name: Lint descriptions
+
+# Reports the health of the OpenAPI descriptions on every change.
+#
+# Deliberately non-blocking. The descriptions are generated from the services
+# and carry existing documentation debt, so failing on it today would just mean
+# everyone learns to ignore a red check.
+#
+# What it does instead is publish the numbers to the job summary so the debt is
+# visible and its direction is obvious. Ratchet by moving a rule from `warn` to
+# `error` in redocly.yaml once its count reaches zero.
+#
+# Only *-openapi.yaml is linted. The sibling *-swagger.yaml files are a second
+# copy of the same content and no known consumer reads them.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint OpenAPI descriptions
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⚙️ Checkout
+        uses: actions/checkout@v4
+
+      - name: 🟢 Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 🧾 Lint every environment
+        # continue-on-error keeps this advisory: a structural error still shows
+        # up in the log and the summary, but does not gate the merge while the
+        # backlog is being worked down.
+        continue-on-error: true
+        run: |
+          echo "## OpenAPI description lint" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Environment | Descriptions | Result |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| --- | --- | --- |" >> "$GITHUB_STEP_SUMMARY"
+
+          status=0
+          for dir in edgraph/*/; do
+            env_name="$(basename "$dir")"
+            files=$(ls "$dir"yaml/*-openapi.yaml 2>/dev/null | wc -l)
+            [ "$files" -eq 0 ] && continue
+
+            if npx --yes @redocly/cli@2 lint "$dir"yaml/*-openapi.yaml \
+                 --format=summary --max-problems 20 > "lint-$env_name.txt" 2>&1; then
+              result="pass"
+            else
+              result="**errors**"
+              status=1
+            fi
+
+            echo "| \`$env_name\` | $files | $result |" >> "$GITHUB_STEP_SUMMARY"
+          done
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "<details><summary>Full output</summary>" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          for f in lint-*.txt; do
+            echo "### ${f%.txt}" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            sed -e 's/\x1b\[[0-9;]*m//g' "$f" | grep -vE '^\s*$|A new version|Update now|Changelog:|^\s*[╔║╚═]' >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          done
+          echo "</details>" >> "$GITHUB_STEP_SUMMARY"
+
+          exit $status
+
+      - name: 📤 Upload lint output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-output
+          path: lint-*.txt
+          if-no-files-found: ignore
