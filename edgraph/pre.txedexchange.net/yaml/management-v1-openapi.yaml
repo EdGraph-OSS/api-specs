@@ -9921,7 +9921,8 @@ paths:
     put:
       tags:
         - Tenant / Instances
-      summary: Updates a new instance.
+      summary: Updates an existing instance.
+      description: "For externally managed Ed-Fi instances, omitting `adminApiUrl` (or sending it as `null`) keeps the\r\ncurrently stored value. Send it as an empty string to remove the Admin API configuration."
       operationId: UpdateInstanceV2
       parameters:
         - name: tenantId
