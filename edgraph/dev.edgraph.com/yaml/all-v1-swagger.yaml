@@ -55558,6 +55558,10 @@ components:
         tenantAdmin:
           type: boolean
           nullable: true
+        status:
+          type: string
+          description: "The user's status across all their tenants: Active if any membership is active, Inactive if every\r\nmembership is inactive, Unknown if they have no memberships. Unlike tenantStatus this does not\r\ndepend on a tenantId being supplied on the request."
+          nullable: true
       additionalProperties: false
       description: Entities
     IdentityApi.User.V2.UserTenantProfileResponse:
