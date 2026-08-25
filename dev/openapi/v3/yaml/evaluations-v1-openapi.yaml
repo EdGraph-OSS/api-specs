@@ -1,106 +1,40 @@
 openapi: 3.0.1
 info:
-  title: Me Api
-  description: Me Api - v1.0
+  title: Evaluations Api
+  description: Evaluations Api - v1.0
   version: v1.0
 servers:
   - url: https://api.dev.edgraph.com/tenant
 paths:
-  /me/cache/refresh:
+  '/tenants/{tenantId}/evaluations/configuration/application':
     post:
       tags:
-        - Cache
-      summary: Refreshes the user's profile cache.
-      operationId: RefreshUserProfileCache
-      responses:
-        '401':
-          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '403':
-          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '500':
-          description: An unhandled error occurred on the server.See the response body for details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '200':
-          description: The requested resource was successfully retrieved.
-        '400':
-          description: Bad Request. The request was invalid and cannot be completed. See the response body for specific validation errors. This will typically be an issue with the query parameters or the request body values.
-  '/me/extensions/{code}':
-    delete:
-      tags:
-        - My Extensions
-      summary: "Removes a user's profile extension.\r\n<br><b>Deprecated.</b> Use `/me/settings/{code}` instead. Superseded by\r\nEdGraph.Services.Settings; see docs/settings-deprecation-map.md. This endpoint\r\nstill works and is unchanged."
-      operationId: RemoveUserExtension
+        - Evaluation Settings
+      summary: Sets the Application Settings of an Evaluation for a given Tenant
+      operationId: SetEvaluationSettingApplicationSetting
       parameters:
-        - name: code
+        - name: tenantId
           in: path
           description: ''
           required: true
           schema:
             type: string
-      responses:
-        '401':
-          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '403':
-          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '500':
-          description: An unhandled error occurred on the server.See the response body for details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '200':
-          description: The requested resource was successfully retrieved.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IdentityApi.User.V1.UserExtensionRemovedResponse'
-        '400':
-          description: Bad Request. The request was invalid and cannot be completed. See the response body for specific validation errors. This will typically be an issue with the query parameters or the request body values.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
-      deprecated: true
-  /me/extensions:
-    post:
-      tags:
-        - My Extensions
-      summary: "Creates or update a user's profile extension.\r\n<br><b>Deprecated.</b> Use `/me/settings` instead. Superseded by\r\nEdGraph.Services.Settings; see docs/settings-deprecation-map.md. This endpoint\r\nstill works and is unchanged."
-      operationId: SetUserExtension
+            format: uuid
       requestBody:
         description: ''
         content:
           application/json-patch+json:
             schema:
-              $ref: '#/components/schemas/IdentityApi.User.V1.SetUserExtensionRequest'
+              $ref: '#/components/schemas/EvaluationApi.EvaluationSettings.V1.SetApplicationRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/IdentityApi.User.V1.SetUserExtensionRequest'
+              $ref: '#/components/schemas/EvaluationApi.EvaluationSettings.V1.SetApplicationRequest'
           text/json:
             schema:
-              $ref: '#/components/schemas/IdentityApi.User.V1.SetUserExtensionRequest'
+              $ref: '#/components/schemas/EvaluationApi.EvaluationSettings.V1.SetApplicationRequest'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/IdentityApi.User.V1.SetUserExtensionRequest'
+              $ref: '#/components/schemas/EvaluationApi.EvaluationSettings.V1.SetApplicationRequest'
       responses:
         '401':
           description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
@@ -125,142 +59,42 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IdentityApi.User.V1.UserExtensionSetResponse'
+                $ref: '#/components/schemas/EvaluationApi.EvaluationSettings.V1.ApplicationSetResponse'
         '400':
           description: Bad Request. The request was invalid and cannot be completed. See the response body for specific validation errors. This will typically be an issue with the query parameters or the request body values.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
-      deprecated: true
-  '/me/preferences/{code}':
-    get:
+  '/tenants/{tenantId}/evaluations/configuration/users':
+    post:
       tags:
-        - My Preferences
-      summary: "Retrieves a user's preference by code.\r\n<br><b>Deprecated.</b> Use `/me/settings/{code}` instead. Superseded by\r\nEdGraph.Services.Settings; see docs/settings-deprecation-map.md. This endpoint\r\nstill works and is unchanged."
-      operationId: Preference
+        - Evaluation Settings
+      summary: Sets the User Settings of an Evaluation for a given Tenant
+      operationId: SetEvaluationSettingUserSetting
       parameters:
-        - name: code
+        - name: tenantId
           in: path
           description: ''
           required: true
           schema:
             type: string
-      responses:
-        '401':
-          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '403':
-          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '500':
-          description: An unhandled error occurred on the server.See the response body for details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '200':
-          description: The requested resource was successfully retrieved.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.UserCacheResponse'
-        '404':
-          description: The resource could not be found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-      deprecated: true
-  /me/preferences:
-    get:
-      tags:
-        - My Preferences
-      summary: "Retrieves the user's preferences.\r\n<br><b>Deprecated.</b> Use `/me/settings` instead. Superseded by\r\nEdGraph.Services.Settings; see docs/settings-deprecation-map.md. This endpoint\r\nstill works and is unchanged."
-      operationId: GetUserPreferences
-      parameters:
-        - name: pageIndex
-          in: query
-          description: ''
-          schema:
-            type: integer
-            format: int32
-            default: 0
-        - name: pageSize
-          in: query
-          description: ''
-          schema:
-            type: integer
-            format: int32
-            default: 10
-        - name: orderBy
-          in: query
-          description: ''
-          schema:
-            type: string
-        - name: filter
-          in: query
-          description: ''
-          schema:
-            type: string
-      responses:
-        '401':
-          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '403':
-          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '500':
-          description: An unhandled error occurred on the server.See the response body for details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '200':
-          description: The requested resource was successfully retrieved.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IdentityApi.User.V1.GetUserPreferencesResponse'
-        '404':
-          description: The resource could not be found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-      deprecated: true
-    post:
-      tags:
-        - My Preferences
-      summary: "Creates or update a user's preference.\r\n<br><b>Deprecated.</b> Use `/me/settings` instead. Superseded by\r\nEdGraph.Services.Settings; see docs/settings-deprecation-map.md. This endpoint\r\nstill works and is unchanged."
-      operationId: UpdateUserPreferenceAsync
+            format: uuid
       requestBody:
         description: ''
         content:
           application/json-patch+json:
             schema:
-              $ref: '#/components/schemas/EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Requests.UpdateUserPreferenceRequest'
+              $ref: '#/components/schemas/EvaluationApi.EvaluationSettings.V1.SetUsersRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Requests.UpdateUserPreferenceRequest'
+              $ref: '#/components/schemas/EvaluationApi.EvaluationSettings.V1.SetUsersRequest'
           text/json:
             schema:
-              $ref: '#/components/schemas/EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Requests.UpdateUserPreferenceRequest'
+              $ref: '#/components/schemas/EvaluationApi.EvaluationSettings.V1.SetUsersRequest'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Requests.UpdateUserPreferenceRequest'
+              $ref: '#/components/schemas/EvaluationApi.EvaluationSettings.V1.SetUsersRequest'
       responses:
         '401':
           description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
@@ -285,27 +119,27 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IdentityApi.User.V1.UserPreferenceUpdatedResponse'
+                $ref: '#/components/schemas/EvaluationApi.EvaluationSettings.V1.UsersSetResponse'
         '400':
           description: Bad Request. The request was invalid and cannot be completed. See the response body for specific validation errors. This will typically be an issue with the query parameters or the request body values.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
-      deprecated: true
-  /me:
+  '/tenants/{tenantId}/evaluations/configuration':
     get:
       tags:
-        - My Profile
-      summary: 'Retrieves the profile of the user that is currently logged in, including the user''s preferences and its associated tenants'
-      operationId: GetUserCacheAsync
+        - Evaluation Settings
+      summary: Gets the Evaluation Settings for a given tenant
+      operationId: GetEvaluationSetting
       parameters:
-        - name: numberOfTenants
-          in: query
+        - name: tenantId
+          in: path
+          description: ''
+          required: true
           schema:
-            type: integer
-            format: int32
-            default: 10
+            type: string
+            format: uuid
       responses:
         '401':
           description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
@@ -330,103 +164,34 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.UserCacheResponse'
-        '404':
-          description: The resource could not be found.
+                $ref: '#/components/schemas/EvaluationApi.EvaluationSettings.V1.EvaluationSettingResponse'
+        '400':
+          description: Bad Request. The request was invalid and cannot be completed. See the response body for specific validation errors. This will typically be an issue with the query parameters or the request body values.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-  '/me/settings/{settingIdOrCode}':
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
+  '/tenants/{tenantId}/evaluations/{evaluationId}':
     delete:
       tags:
-        - My Settings
-      summary: 'Delete the User-scope setting for a key, addressed by SettingType id or Code'
-      operationId: DeleteMySetting
+        - Evaluations
+      summary: Deletes an Evaluation for a given tenant
+      operationId: DeleteEvaluation
       parameters:
-        - name: settingIdOrCode
+        - name: tenantId
           in: path
+          description: ''
           required: true
           schema:
             type: string
-      requestBody:
-        content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.DeleteMySettingRequestBody'
-          application/json:
-            schema:
-              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.DeleteMySettingRequestBody'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.DeleteMySettingRequestBody'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.DeleteMySettingRequestBody'
-      responses:
-        '401':
-          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '403':
-          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '500':
-          description: An unhandled error occurred on the server.See the response body for details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '204':
-          description: No Content
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '422':
-          description: Client Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-    get:
-      tags:
-        - My Settings
-      summary: Get a User-scope setting
-      description: "Answers with the stored record alone. Effective-value resolution is opt-in: pass\r\n`resolveEffectiveValue=true` to instead receive the value in force at this scope — every\r\nlayer above it merged under the setting's own value."
-      operationId: GetMySetting
-      parameters:
-        - name: settingIdOrCode
+            format: uuid
+        - name: evaluationId
           in: path
+          description: ''
           required: true
           schema:
             type: string
-        - name: settingTypeId
-          in: query
-          schema:
-            type: string
             format: uuid
-        - name: provider
-          in: query
-          schema:
-            type: string
-        - name: applicationId
-          in: query
-          schema:
-            type: string
-            format: uuid
-        - name: resolveEffectiveValue
-          in: query
-          schema:
-            type: boolean
-            default: false
       responses:
         '401':
           description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
@@ -447,126 +212,37 @@ paths:
               schema:
                 $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
         '200':
-          description: Success
+          description: The requested resource was successfully retrieved.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SettingsApi.UserSettings.V1.UserSettingMessage'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '422':
-          description: Client Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-    put:
-      tags:
-        - My Settings
-      summary: 'Update the User-scope setting for a key, addressed by SettingType id or Code'
-      operationId: UpdateMySetting
-      parameters:
-        - name: settingIdOrCode
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.UpdateMySettingRequestBody'
-          application/json:
-            schema:
-              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.UpdateMySettingRequestBody'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.UpdateMySettingRequestBody'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.UpdateMySettingRequestBody'
-      responses:
-        '401':
-          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '403':
-          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '500':
-          description: An unhandled error occurred on the server.See the response body for details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '204':
-          description: No Content
+                $ref: '#/components/schemas/EvaluationApi.Evaluations.V1.EvaluationDeletedResponse'
         '400':
-          description: Bad Request
+          description: Bad Request. The request was invalid and cannot be completed. See the response body for specific validation errors. This will typically be an issue with the query parameters or the request body values.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '422':
-          description: Client Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-  /me/settings:
     get:
       tags:
-        - My Settings
-      summary: List User-scope settings
-      operationId: SearchMySettings
+        - Evaluations
+      summary: Get an Evaluation for a given tenant
+      operationId: GetEvaluation
       parameters:
-        - name: applicationId
-          in: query
+        - name: tenantId
+          in: path
+          description: ''
+          required: true
           schema:
             type: string
             format: uuid
-        - name: settingTypeId
-          in: query
+        - name: evaluationId
+          in: path
+          description: ''
+          required: true
           schema:
             type: string
             format: uuid
-        - name: pageIndex
-          in: query
-          schema:
-            type: integer
-            format: int32
-            default: 0
-        - name: pageSize
-          in: query
-          schema:
-            type: integer
-            format: int32
-            default: 10
-        - name: orderBy
-          in: query
-          schema:
-            type: string
-            default: ''
-        - name: filter
-          in: query
-          schema:
-            type: string
-            default: ''
       responses:
         '401':
           description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
@@ -587,86 +263,52 @@ paths:
               schema:
                 $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
         '200':
-          description: Success
+          description: The requested resource was successfully retrieved.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SettingsApi.UserSettings.V1.SearchUserSettingsResponse'
+                $ref: '#/components/schemas/EvaluationApi.Evaluations.V1.EvaluationResponse'
         '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
-    post:
-      tags:
-        - My Settings
-      summary: Create a User-scope setting
-      operationId: CreateMySetting
-      requestBody:
-        content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.CreateMySettingRequestBody'
-          application/json:
-            schema:
-              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.CreateMySettingRequestBody'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.CreateMySettingRequestBody'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.CreateMySettingRequestBody'
-      responses:
-        '401':
-          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '403':
-          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '500':
-          description: An unhandled error occurred on the server.See the response body for details.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-        '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SettingsApi.UserSettings.V1.CreateUserSettingResponse'
-        '400':
-          description: Bad Request
+          description: Bad Request. The request was invalid and cannot be completed. See the response body for specific validation errors. This will typically be an issue with the query parameters or the request body values.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
     put:
       tags:
-        - My Settings
-      summary: 'Create or update (upsert) a User-scope setting, addressed by the SettingTypeId in the body'
-      operationId: SetMySetting
+        - Evaluations
+      summary: Updates an Evaluation for a given tenant
+      operationId: UpdateEvaluation
+      parameters:
+        - name: tenantId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: evaluationId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+            format: uuid
       requestBody:
+        description: ''
         content:
           application/json-patch+json:
             schema:
-              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.SetMySettingRequestBody'
+              $ref: '#/components/schemas/EvaluationApi.Evaluations.V1.UpdateEvaluationRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.SetMySettingRequestBody'
+              $ref: '#/components/schemas/EvaluationApi.Evaluations.V1.UpdateEvaluationRequest'
           text/json:
             schema:
-              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.SetMySettingRequestBody'
+              $ref: '#/components/schemas/EvaluationApi.Evaluations.V1.UpdateEvaluationRequest'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.SetMySettingRequestBody'
+              $ref: '#/components/schemas/EvaluationApi.Evaluations.V1.UpdateEvaluationRequest'
       responses:
         '401':
           description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
@@ -687,43 +329,54 @@ paths:
               schema:
                 $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
         '200':
-          description: Success
+          description: The requested resource was successfully retrieved.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SettingsApi.UserSettings.V1.SetUserSettingResponse'
+                $ref: '#/components/schemas/EvaluationApi.Evaluations.V1.EvaluationUpdatedResponse'
         '400':
-          description: Bad Request
+          description: Bad Request. The request was invalid and cannot be completed. See the response body for specific validation errors. This will typically be an issue with the query parameters or the request body values.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
-  /me/tenants:
+  '/tenants/{tenantId}/evaluations/appraisers':
     get:
       tags:
-        - My Tenants
-      summary: Retrieves the Tenants of the User that is currently logged in.
-      operationId: GetUserTenants
+        - Evaluations
+      summary: Searches the Appraisers associated with an Evaluation for a given Tenant.
+      operationId: SearchEvaluationAppraisers
       parameters:
-        - name: pageIndex
-          in: query
+        - name: tenantId
+          in: path
+          description: ''
+          required: true
           schema:
-            type: integer
-            format: int32
-            default: 0
+            type: string
+            format: uuid
         - name: pageSize
           in: query
+          description: ''
           schema:
             type: integer
             format: int32
             default: 10
-        - name: filter
+        - name: pageIndex
           in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: orderBy
+          in: query
+          description: ''
           schema:
             type: string
             default: ''
-        - name: orderBy
+        - name: filter
           in: query
+          description: ''
           schema:
             type: string
             default: ''
@@ -751,13 +404,399 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IdentityApi.User.V1.UserTenantProfilePaginatedItemsViewModel'
-        '404':
-          description: The resource could not be found.
+                $ref: '#/components/schemas/EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.Evaluations.AppraisersSearchedResponse'
+        '400':
+          description: Bad Request. The request was invalid and cannot be completed. See the response body for specific validation errors. This will typically be an issue with the query parameters or the request body values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
+  '/tenants/{tenantId}/evaluations/campuses':
+    get:
+      tags:
+        - Evaluations
+      summary: Searches the Campuses associated with an Evaluation for a given Tenant.
+      operationId: SearchEvaluationCampuses
+      parameters:
+        - name: tenantId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: pageSize
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+            default: 10
+        - name: pageIndex
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: orderBy
+          in: query
+          description: ''
+          schema:
+            type: string
+            default: ''
+        - name: filter
+          in: query
+          description: ''
+          schema:
+            type: string
+            default: ''
+      responses:
+        '401':
+          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '403':
+          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '500':
+          description: An unhandled error occurred on the server.See the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '200':
+          description: The requested resource was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluationApi.Evaluations.V1.CampusResponsePaginatedItemsViewModel'
+        '400':
+          description: Bad Request. The request was invalid and cannot be completed. See the response body for specific validation errors. This will typically be an issue with the query parameters or the request body values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
+  '/tenants/{tenantId}/evaluations/count':
+    get:
+      tags:
+        - Evaluations
+      operationId: GetEvaluationCount
+      parameters:
+        - name: tenantId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '401':
+          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '403':
+          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '500':
+          description: An unhandled error occurred on the server.See the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluationApi.Evaluations.V1.EvaluationCountResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
+  '/tenants/{tenantId}/evaluations/forms':
+    get:
+      tags:
+        - Evaluations
+      summary: Searches the Forms associated with an Evaluation for a given Tenant.
+      operationId: SearchEvaluationForms
+      parameters:
+        - name: tenantId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: pageSize
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+            default: 10
+        - name: pageIndex
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: orderBy
+          in: query
+          description: ''
+          schema:
+            type: string
+            default: ''
+        - name: filter
+          in: query
+          description: ''
+          schema:
+            type: string
+            default: ''
+      responses:
+        '401':
+          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '403':
+          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '500':
+          description: An unhandled error occurred on the server.See the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '200':
+          description: The requested resource was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluationApi.Evaluations.V1.FormResponsePaginatedItemsViewModel'
+        '400':
+          description: Bad Request. The request was invalid and cannot be completed. See the response body for specific validation errors. This will typically be an issue with the query parameters or the request body values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
+  '/tenants/{tenantId}/evaluations/staff':
+    get:
+      tags:
+        - Evaluations
+      summary: Searches the Staff associated with an Evaluation for a given Tenant.
+      operationId: SearchEvaluationStaff
+      parameters:
+        - name: tenantId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: pageSize
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+            default: 10
+        - name: pageIndex
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: orderBy
+          in: query
+          description: ''
+          schema:
+            type: string
+            default: ''
+        - name: filter
+          in: query
+          description: ''
+          schema:
+            type: string
+            default: ''
+      responses:
+        '401':
+          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '403':
+          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '500':
+          description: An unhandled error occurred on the server.See the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '200':
+          description: The requested resource was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.Evaluations.StaffSearchedResponse'
+        '400':
+          description: Bad Request. The request was invalid and cannot be completed. See the response body for specific validation errors. This will typically be an issue with the query parameters or the request body values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
+  '/tenants/{tenantId}/evaluations':
+    get:
+      tags:
+        - Evaluations
+      summary: Searches the Evaluations for a given tenant
+      operationId: SearchEvaluations
+      parameters:
+        - name: tenantId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: pageSize
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+            default: 10
+        - name: pageIndex
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: orderBy
+          in: query
+          description: ''
+          schema:
+            type: string
+            default: ''
+        - name: filter
+          in: query
+          description: ''
+          schema:
+            type: string
+            default: ''
+      responses:
+        '401':
+          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '403':
+          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '500':
+          description: An unhandled error occurred on the server.See the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '200':
+          description: The requested resource was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluationApi.Evaluations.V1.EvaluationResponsePaginatedItemsViewModel'
+        '400':
+          description: Bad Request. The request was invalid and cannot be completed. See the response body for specific validation errors. This will typically be an issue with the query parameters or the request body values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
+    post:
+      tags:
+        - Evaluations
+      summary: Creates a new Evaluation for a given tenant
+      operationId: CreateEvaluation
+      parameters:
+        - name: tenantId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/EvaluationApi.Evaluations.V1.CreateEvaluationRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EvaluationApi.Evaluations.V1.CreateEvaluationRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/EvaluationApi.Evaluations.V1.CreateEvaluationRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/EvaluationApi.Evaluations.V1.CreateEvaluationRequest'
+      responses:
+        '401':
+          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '403':
+          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '500':
+          description: An unhandled error occurred on the server.See the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '200':
+          description: The requested resource was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluationApi.Evaluations.V1.EvaluationCreatedResponse'
+        '400':
+          description: Bad Request. The request was invalid and cannot be completed. See the response body for specific validation errors. This will typically be an issue with the query parameters or the request body values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
 components:
   schemas:
     EdGraph.Common.Errors.Core.ProblemDetails:
@@ -785,325 +824,85 @@ components:
           nullable: true
           readOnly: true
       additionalProperties: false
-    EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Requests.UpdateUserPreferenceRequest:
+    EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.Evaluations.AppraiserResponse:
       type: object
       properties:
-        tenantId:
+        userId:
           type: string
           format: uuid
-          nullable: true
-        clientId:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        value:
-          type: string
-          nullable: true
-      additionalProperties: false
-    EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.CreateMySettingRequestBody:
-      type: object
-      properties:
-        settingId:
-          type: string
-          format: uuid
-          nullable: true
-        settingTypeId:
-          type: string
-          format: uuid
-          nullable: true
-        provider:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        applicationId:
-          type: string
-          format: uuid
-          nullable: true
-        value:
-          nullable: true
-      additionalProperties: false
-    EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.DeleteMySettingRequestBody:
-      type: object
-      properties:
-        settingTypeId:
-          type: string
-          format: uuid
-          nullable: true
-        provider:
-          type: string
-          nullable: true
-        applicationId:
-          type: string
-          format: uuid
-          nullable: true
-        reason:
-          type: string
-          nullable: true
-      additionalProperties: false
-    EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.SetMySettingRequestBody:
-      type: object
-      properties:
-        settingId:
-          type: string
-          format: uuid
-          nullable: true
-        settingTypeId:
-          type: string
-          format: uuid
-          nullable: true
-        provider:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        applicationId:
-          type: string
-          format: uuid
-          nullable: true
-        value:
-          nullable: true
-      additionalProperties: false
-    EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.UpdateMySettingRequestBody:
-      type: object
-      properties:
-        settingTypeId:
-          type: string
-          format: uuid
-          nullable: true
-        provider:
-          type: string
-          nullable: true
-        applicationId:
-          type: string
-          format: uuid
-          nullable: true
-        value:
-          nullable: true
-      additionalProperties: false
-    EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.UserCacheResponse:
-      type: object
-      properties:
-        userName:
-          type: string
-          description: The user name for this user.
-          nullable: true
-        email:
-          type: string
-          description: The email address for this user.
-          nullable: true
         firstName:
           type: string
-          description: The first name for this user.
           nullable: true
         lastName:
           type: string
-          description: The last name for this user.
           nullable: true
-        preferences:
-          type: array
-          items:
-            $ref: '#/components/schemas/IdentityApi.User.V1.Preference'
-          description: List of preferences associated with this user
-          nullable: true
-        tenants:
-          type: array
-          items:
-            $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.UserCacheTenantResponse'
-          description: List of tenants associated with this user
-          nullable: true
-        browserDebugEnabled:
-          type: boolean
-          description: Flag to indicate if the debug mode for user is enabled
-        extensions:
-          type: array
-          items:
-            $ref: '#/components/schemas/IdentityApi.User.V1.UserExtension'
-          nullable: true
-        selectedTenant:
-          $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.UserCacheTenantResponse'
-        tenantsTotalCount:
-          type: integer
-          description: The total count of active tenants associated with this user
-          format: int32
-      additionalProperties: false
-    EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.UserCacheTenantEducationOrganizationResponse:
-      type: object
-      properties:
-        educationOrganizationId:
-          type: integer
-          format: int32
-        shortNameOfInstitution:
+        email:
           type: string
           nullable: true
-        nameOfInstitution:
-          type: string
-          nullable: true
-        staffClassifications:
-          type: array
-          items:
-            type: string
-          nullable: true
-        source:
+        numberOfEvaluations:
+          type: integer
+          format: int32
+        campus:
           type: string
           nullable: true
       additionalProperties: false
-    EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.UserCacheTenantResponse:
+    EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.Evaluations.AppraiserSearchStatus:
+      enum:
+        - Unknown
+        - NoAppraiserRolesFound
+        - NoUsersFound
+        - AppraiserRolesFound
+      type: string
+    EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.Evaluations.AppraisersSearchedResponse:
       type: object
       properties:
-        tenantId:
+        pageIndex:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        count:
+          type: integer
+          format: int64
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.Evaluations.AppraiserResponse'
+          nullable: true
+        status:
+          $ref: '#/components/schemas/EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.Evaluations.AppraiserSearchStatus'
+      additionalProperties: false
+    EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.Evaluations.StaffResponse:
+      type: object
+      properties:
+        userId:
           type: string
           format: uuid
-        tenantType:
+        firstName:
           type: string
           nullable: true
-        tenantTypes:
-          type: array
-          items:
-            type: string
-          nullable: true
-        organizationIdentifier:
+        lastName:
           type: string
           nullable: true
-        organizationName:
+        email:
           type: string
           nullable: true
-        state:
-          type: string
-          nullable: true
-        tenantStatus:
-          type: string
-          nullable: true
-        isDemo:
-          type: boolean
-        educationOrganizations:
-          type: array
-          items:
-            $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.UserCacheTenantEducationOrganizationResponse'
-          nullable: true
-        licenses:
-          type: array
-          items:
-            $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.UserTenantLicense'
-          nullable: true
-      additionalProperties: false
-    EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.UserTenantLicense:
-      type: object
-      properties:
-        applicationId:
-          type: string
-          nullable: true
-        applicationName:
-          type: string
-          nullable: true
-        startDateTime:
-          type: string
-          nullable: true
-        endDateTime:
-          type: string
-          nullable: true
-        roles:
-          type: array
-          items:
-            $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.UserTenantLicenseRole'
-          nullable: true
-      additionalProperties: false
-    EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.UserTenantLicenseRole:
-      type: object
-      properties:
-        role:
-          type: string
-          nullable: true
-        isImplicitlyAssigned:
-          type: boolean
-        status:
-          type: string
-          description: "Maps to EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.UserTenantLicenseRoleStatus.<br></br>\r\n\r\nFor more info on deprecation see: Task 9962: Modify implicit license response to prioritize explicit licenses over implicit (part 2) (https://dev.azure.com/edwire/EW.Educate/_workitems/edit/9962)<br></br>\r\n\r\nUse EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.LicenseSource instead.<br></br>"
-          nullable: true
-          deprecated: true
-        educationOrganizationId:
+        numberOfEvaluations:
           type: integer
           format: int32
-          nullable: true
-        staffClassification:
+        campus:
           type: string
           nullable: true
-        source:
-          type: string
-          description: "Maps to EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.LicenseSource.<br></br>\r\n\r\nFor more info see: Task 9962: Modify implicit license response to prioritize explicit licenses over implicit (part 2) (https://dev.azure.com/edwire/EW.Educate/_workitems/edit/9962)"
-          nullable: true
       additionalProperties: false
-    Google.Protobuf.WellKnownTypes.ListValue:
-      type: object
-      properties:
-        values:
-          type: array
-          items:
-            $ref: '#/components/schemas/Google.Protobuf.WellKnownTypes.Value'
-          nullable: true
-          readOnly: true
-      additionalProperties: false
-    Google.Protobuf.WellKnownTypes.NullValue:
+    EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.Evaluations.StaffSearchStatus:
       enum:
-        - NullValue
+        - Unknown
+        - NoStaffRolesFound
+        - NoUsersFound
+        - StaffRolesFound
       type: string
-    Google.Protobuf.WellKnownTypes.Struct:
-      type: object
-      properties:
-        fields:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/Google.Protobuf.WellKnownTypes.Value'
-          nullable: true
-          readOnly: true
-      additionalProperties: false
-    Google.Protobuf.WellKnownTypes.Value:
-      type: object
-      properties:
-        nullValue:
-          $ref: '#/components/schemas/Google.Protobuf.WellKnownTypes.NullValue'
-        hasNullValue:
-          type: boolean
-          readOnly: true
-        numberValue:
-          type: number
-          format: double
-        hasNumberValue:
-          type: boolean
-          readOnly: true
-        stringValue:
-          type: string
-          nullable: true
-        hasStringValue:
-          type: boolean
-          readOnly: true
-        boolValue:
-          type: boolean
-        hasBoolValue:
-          type: boolean
-          readOnly: true
-        structValue:
-          $ref: '#/components/schemas/Google.Protobuf.WellKnownTypes.Struct'
-        listValue:
-          $ref: '#/components/schemas/Google.Protobuf.WellKnownTypes.ListValue'
-        kindCase:
-          $ref: '#/components/schemas/Google.Protobuf.WellKnownTypes.Value+KindOneofCase'
-      additionalProperties: false
-    Google.Protobuf.WellKnownTypes.Value+KindOneofCase:
-      enum:
-        - None
-        - NullValue
-        - NumberValue
-        - StringValue
-        - BoolValue
-        - StructValue
-        - ListValue
-      type: string
-    IdentityApi.User.V1.GetUserPreferencesResponse:
+    EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.Evaluations.StaffSearchedResponse:
       type: object
       properties:
         pageIndex:
@@ -1118,211 +917,235 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/IdentityApi.User.V1.Preference'
+            $ref: '#/components/schemas/EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.Evaluations.StaffResponse'
           nullable: true
-          readOnly: true
+        status:
+          $ref: '#/components/schemas/EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.Evaluations.StaffSearchStatus'
       additionalProperties: false
-    IdentityApi.User.V1.Preference:
+    EvaluationApi.EvaluationSettings.V1.ApplicationSetResponse:
       type: object
       properties:
         tenantId:
           type: string
           nullable: true
-        clientId:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        value:
-          type: string
-          nullable: true
       additionalProperties: false
-    IdentityApi.User.V1.SetUserExtensionRequest:
+    EvaluationApi.EvaluationSettings.V1.EvaluationSettingResponse:
       type: object
       properties:
-        userId:
+        id:
           type: string
           nullable: true
-        code:
-          type: string
-          nullable: true
-        data:
-          type: string
-          nullable: true
-        dataType:
-          type: string
-          nullable: true
-      additionalProperties: false
-    IdentityApi.User.V1.TenantStatus:
-      enum:
-        - Unknown
-        - Active
-        - Inactive
-      type: string
-    IdentityApi.User.V1.TenantType:
-      enum:
-        - Unknown
-        - DataStandardGoverningBody
-        - EducationalServiceAgency
-        - ImplementationPartner
-        - IndependentSoftwareVendor
-        - Internal
-        - LocalEducationAgency
-        - ManagedServiceProvider
-        - StateEducationAgency
-        - AssessmentProvider
-      type: string
-    IdentityApi.User.V1.UserExtension:
-      type: object
-      properties:
-        code:
-          type: string
-          nullable: true
-        data:
-          type: string
-          nullable: true
-      additionalProperties: false
-    IdentityApi.User.V1.UserExtensionRemovedResponse:
-      type: object
-      properties:
-        userId:
-          type: string
-          nullable: true
-      additionalProperties: false
-    IdentityApi.User.V1.UserExtensionSetResponse:
-      type: object
-      properties:
-        userId:
-          type: string
-          nullable: true
-      additionalProperties: false
-    IdentityApi.User.V1.UserPreferenceUpdatedResponse:
-      type: object
-      properties:
         tenantId:
           type: string
           nullable: true
-        clientId:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        value:
-          type: string
-          nullable: true
-      additionalProperties: false
-    IdentityApi.User.V1.UserTenantProfile:
-      type: object
-      properties:
-        tenantId:
-          type: string
-          nullable: true
-        tenantTypes:
+        forms:
           type: array
           items:
-            $ref: '#/components/schemas/IdentityApi.User.V1.TenantType'
+            $ref: '#/components/schemas/EvaluationApi.EvaluationSettings.V1.FormConfigurationResponse'
           nullable: true
           readOnly: true
-        tenantStatus:
-          $ref: '#/components/schemas/IdentityApi.User.V1.TenantStatus'
-        organizationIdentifier:
-          type: string
-          nullable: true
-        organizationName:
-          type: string
-          nullable: true
-        state:
-          type: string
-          nullable: true
-        isDemo:
-          type: boolean
-          nullable: true
-        educationOrganizations:
-          type: array
-          items:
-            $ref: '#/components/schemas/IdentityApi.User.V1.UserTenantProfile+Types+UserTenantEducationOrganizationProfile'
-          nullable: true
-          readOnly: true
-        licenses:
-          type: array
-          items:
-            $ref: '#/components/schemas/IdentityApi.User.V1.UserTenantProfile+Types+UserTenantLicenseProfile'
-          nullable: true
-          readOnly: true
-        mfaCompleted:
-          type: boolean
-        tenantType:
-          type: string
-          nullable: true
-      additionalProperties: false
-    IdentityApi.User.V1.UserTenantProfile+Types+UserTenantEducationOrganizationProfile:
-      type: object
-      properties:
-        educationOrganizationId:
+        recommendedNumberOfEvaluations:
           type: integer
           format: int32
           nullable: true
-        shortNameOfInstitution:
+        reminderEmailSchedule:
+          $ref: '#/components/schemas/EvaluationApi.EvaluationSettings.V1.ScheduleType'
+        createdBy:
           type: string
           nullable: true
-        nameOfInstitution:
+        createdDateTime:
           type: string
           nullable: true
+        lastModifiedBy:
+          type: string
+          nullable: true
+        lastModifiedDateTime:
+          type: string
+          nullable: true
+        deletedBy:
+          type: string
+          nullable: true
+        deletedDateTime:
+          type: string
+          nullable: true
+        isDeleted:
+          type: boolean
+          nullable: true
+        appraisers:
+          type: array
+          items:
+            type: string
+          nullable: true
+          readOnly: true
         staffClassifications:
           type: array
           items:
             type: string
           nullable: true
           readOnly: true
-        source:
-          type: string
-          nullable: true
-      additionalProperties: false
-    IdentityApi.User.V1.UserTenantProfile+Types+UserTenantLicenseProfile:
-      type: object
-      properties:
-        applicationId:
-          type: string
-          nullable: true
-        applicationName:
-          type: string
-          nullable: true
-        startDateTime:
-          type: string
-          nullable: true
-        endDateTime:
-          type: string
-          nullable: true
-        roles:
+        availablePersonas:
           type: array
           items:
-            $ref: '#/components/schemas/IdentityApi.User.V1.UserTenantProfile+Types+UserTenantLicenseProfile+Types+UserTenantLicenseRoleProfile'
+            $ref: '#/components/schemas/EvaluationApi.EvaluationSettings.V1.PersonaResponse'
+          nullable: true
+          readOnly: true
+        roleConfigurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/EvaluationApi.EvaluationSettings.V1.RoleConfigurationResponse'
           nullable: true
           readOnly: true
       additionalProperties: false
-    IdentityApi.User.V1.UserTenantProfile+Types+UserTenantLicenseProfile+Types+UserTenantLicenseRoleProfile:
+    EvaluationApi.EvaluationSettings.V1.FormConfigurationResponse:
+      type: object
+      properties:
+        formId:
+          type: string
+          nullable: true
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/EvaluationApi.EvaluationSettings.V1.FormVersionConfigurationResponse'
+          nullable: true
+          readOnly: true
+      additionalProperties: false
+    EvaluationApi.EvaluationSettings.V1.FormVersionConfigurationResponse:
+      type: object
+      properties:
+        version:
+          type: string
+          nullable: true
+        activeStartingDate:
+          type: string
+          nullable: true
+        activeUntilDate:
+          type: string
+          nullable: true
+      additionalProperties: false
+    EvaluationApi.EvaluationSettings.V1.PersonaResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        identifier:
+          type: string
+          nullable: true
+        isDefault:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+      description: Available Personas
+    EvaluationApi.EvaluationSettings.V1.RoleConfigurationResponse:
       type: object
       properties:
         role:
           type: string
           nullable: true
-        isImplicitlyAssigned:
+        assignedPersonaIdentifiers:
+          type: array
+          items:
+            type: string
+          nullable: true
+          readOnly: true
+        ignoreOrganization:
           type: boolean
           nullable: true
-        status:
+      additionalProperties: false
+      description: Role Personas
+    EvaluationApi.EvaluationSettings.V1.ScheduleType:
+      enum:
+        - Unknown
+        - Never
+        - Daily
+        - Weekly
+      type: string
+    EvaluationApi.EvaluationSettings.V1.SetApplicationRequest:
+      type: object
+      properties:
+        tenantId:
           type: string
           nullable: true
-        educationOrganizationId:
+        forms:
+          type: array
+          items:
+            $ref: '#/components/schemas/EvaluationApi.EvaluationSettings.V1.SetFormConfigurationRequest'
+          nullable: true
+          readOnly: true
+        recommendedNumberOfEvaluations:
           type: integer
           format: int32
           nullable: true
-        staffClassification:
+        reminderEmailSchedule:
+          $ref: '#/components/schemas/EvaluationApi.EvaluationSettings.V1.ScheduleType'
+      additionalProperties: false
+    EvaluationApi.EvaluationSettings.V1.SetFormConfigurationRequest:
+      type: object
+      properties:
+        formId:
+          type: string
+          nullable: true
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/EvaluationApi.EvaluationSettings.V1.SetFormVersionConfigurationRequest'
+          nullable: true
+          readOnly: true
+      additionalProperties: false
+    EvaluationApi.EvaluationSettings.V1.SetFormVersionConfigurationRequest:
+      type: object
+      properties:
+        version:
+          type: string
+          nullable: true
+        activeStartingDate:
+          type: string
+          nullable: true
+        activeUntilDate:
           type: string
           nullable: true
       additionalProperties: false
-    IdentityApi.User.V1.UserTenantProfilePaginatedItemsViewModel:
+    EvaluationApi.EvaluationSettings.V1.SetUsersRequest:
+      type: object
+      properties:
+        tenantId:
+          type: string
+          nullable: true
+        appraisers:
+          type: array
+          items:
+            type: string
+          nullable: true
+          readOnly: true
+        staffClassifications:
+          type: array
+          items:
+            type: string
+          nullable: true
+          readOnly: true
+      additionalProperties: false
+    EvaluationApi.EvaluationSettings.V1.UsersSetResponse:
+      type: object
+      properties:
+        tenantId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    EvaluationApi.Evaluations.V1.CampusResponse:
+      type: object
+      properties:
+        campus:
+          type: string
+          nullable: true
+        identifierType:
+          $ref: '#/components/schemas/EvaluationApi.Evaluations.V1.OrganizationIdentifierType'
+        discriminator:
+          $ref: '#/components/schemas/EvaluationApi.Evaluations.V1.OrganizationDiscriminator'
+      additionalProperties: false
+    EvaluationApi.Evaluations.V1.CampusResponsePaginatedItemsViewModel:
       type: object
       properties:
         pageIndex:
@@ -1337,7 +1160,246 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/IdentityApi.User.V1.UserTenantProfile'
+            $ref: '#/components/schemas/EvaluationApi.Evaluations.V1.CampusResponse'
+          nullable: true
+      additionalProperties: false
+    EvaluationApi.Evaluations.V1.CreateEvaluationRequest:
+      type: object
+      properties:
+        tenantId:
+          type: string
+          nullable: true
+        evaluationDate:
+          type: string
+          nullable: true
+        campus:
+          type: string
+          nullable: true
+        appraiserUserId:
+          type: string
+          nullable: true
+        staffUserId:
+          type: string
+          nullable: true
+        formId:
+          type: string
+          nullable: true
+        formVersion:
+          type: string
+          nullable: true
+        campusClassId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    EvaluationApi.Evaluations.V1.EvaluationCountResponse:
+      type: object
+      properties:
+        evaluationCount:
+          type: integer
+          format: int32
+        appraiserCount:
+          type: integer
+          format: int32
+        staffCount:
+          type: integer
+          format: int32
+      additionalProperties: false
+    EvaluationApi.Evaluations.V1.EvaluationCreatedResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        tenantId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    EvaluationApi.Evaluations.V1.EvaluationDeletedResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        tenantId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    EvaluationApi.Evaluations.V1.EvaluationResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        tenantId:
+          type: string
+          nullable: true
+        evaluationDate:
+          type: string
+          nullable: true
+        submissionDate:
+          type: string
+          nullable: true
+        campus:
+          type: string
+          nullable: true
+        appraiserUserId:
+          type: string
+          nullable: true
+        staffUserId:
+          type: string
+          nullable: true
+        formId:
+          type: string
+          nullable: true
+        formVersion:
+          type: string
+          nullable: true
+        status:
+          $ref: '#/components/schemas/EvaluationApi.Evaluations.V1.EvaluationStatus'
+        createdBy:
+          type: string
+          nullable: true
+        createdDateTime:
+          type: string
+          nullable: true
+        lastModifiedBy:
+          type: string
+          nullable: true
+        lastModifiedDateTime:
+          type: string
+          nullable: true
+        deletedBy:
+          type: string
+          nullable: true
+        deletedDateTime:
+          type: string
+          nullable: true
+        isDeleted:
+          type: boolean
+          nullable: true
+        appraiserFullName:
+          type: string
+          nullable: true
+        staffFullName:
+          type: string
+          nullable: true
+        campusClassId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    EvaluationApi.Evaluations.V1.EvaluationResponsePaginatedItemsViewModel:
+      type: object
+      properties:
+        pageIndex:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        count:
+          type: integer
+          format: int64
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EvaluationApi.Evaluations.V1.EvaluationResponse'
+          nullable: true
+      additionalProperties: false
+    EvaluationApi.Evaluations.V1.EvaluationStatus:
+      enum:
+        - Unknown
+        - Completed
+        - Scheduled
+        - Incomplete
+      type: string
+    EvaluationApi.Evaluations.V1.EvaluationUpdatedResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        tenantId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    EvaluationApi.Evaluations.V1.FormResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        version:
+          type: string
+          nullable: true
+      additionalProperties: false
+    EvaluationApi.Evaluations.V1.FormResponsePaginatedItemsViewModel:
+      type: object
+      properties:
+        pageIndex:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        count:
+          type: integer
+          format: int64
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EvaluationApi.Evaluations.V1.FormResponse'
+          nullable: true
+      additionalProperties: false
+    EvaluationApi.Evaluations.V1.OrganizationDiscriminator:
+      enum:
+        - Unknown
+        - EducationOrganizationNetwork
+        - EducationServiceCenter
+        - LocalEducationAgency
+        - OrganizationDepartment
+        - Other
+        - PostSecondaryInstitution
+        - School
+        - StateEducationAgency
+      type: string
+    EvaluationApi.Evaluations.V1.OrganizationIdentifierType:
+      enum:
+        - Unknown
+        - Main
+        - StateId
+      type: string
+    EvaluationApi.Evaluations.V1.UpdateEvaluationRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        tenantId:
+          type: string
+          nullable: true
+        evaluationDate:
+          type: string
+          nullable: true
+        campus:
+          type: string
+          nullable: true
+        appraiserUserId:
+          type: string
+          nullable: true
+        staffUserId:
+          type: string
+          nullable: true
+        formId:
+          type: string
+          nullable: true
+        formVersion:
+          type: string
+          nullable: true
+        campusClassId:
+          type: string
           nullable: true
       additionalProperties: false
     Microsoft.AspNetCore.Mvc.ValidationProblemDetails:
@@ -1367,75 +1429,6 @@ components:
           type: string
           nullable: true
       additionalProperties: { }
-    SettingsApi.UserSettings.V1.CreateUserSettingResponse:
-      type: object
-      properties:
-        settingId:
-          type: string
-          nullable: true
-      additionalProperties: false
-    SettingsApi.UserSettings.V1.SearchUserSettingsResponse:
-      type: object
-      properties:
-        pageIndex:
-          type: integer
-          format: int32
-        pageSize:
-          type: integer
-          format: int32
-        count:
-          type: integer
-          format: int64
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SettingsApi.UserSettings.V1.UserSettingMessage'
-          nullable: true
-          readOnly: true
-      additionalProperties: false
-    SettingsApi.UserSettings.V1.SetUserSettingResponse:
-      type: object
-      properties:
-        settingId:
-          type: string
-          nullable: true
-      additionalProperties: false
-    SettingsApi.UserSettings.V1.UserSettingMessage:
-      type: object
-      properties:
-        id:
-          type: string
-          nullable: true
-        settingTypeId:
-          type: string
-          nullable: true
-        applicationId:
-          type: string
-          nullable: true
-        schemaVersion:
-          type: string
-          nullable: true
-        value:
-          $ref: '#/components/schemas/Google.Protobuf.WellKnownTypes.Value'
-        createdBy:
-          type: string
-          nullable: true
-        createdDateTime:
-          type: string
-          nullable: true
-        lastModifiedBy:
-          type: string
-          nullable: true
-        lastModifiedDateTime:
-          type: string
-          nullable: true
-        provider:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-      additionalProperties: false
   securitySchemes:
     oauth2:
       type: oauth2
