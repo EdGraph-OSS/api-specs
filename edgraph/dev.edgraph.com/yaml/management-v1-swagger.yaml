@@ -20452,16 +20452,16 @@ paths:
         content:
           application/json-patch+json:
             schema:
-              $ref: '#/components/schemas/EdGraph.HttpAggregators.Management.Api.Controllers.v1.ViewModels.Requests.Users.ActivateBulkTenantUser'
+              $ref: '#/components/schemas/EdGraph.HttpAggregators.Management.Api.Controllers.v1.ViewModels.Requests.Users.ActivateBulkTenantUserRequest'
           application/json:
             schema:
-              $ref: '#/components/schemas/EdGraph.HttpAggregators.Management.Api.Controllers.v1.ViewModels.Requests.Users.ActivateBulkTenantUser'
+              $ref: '#/components/schemas/EdGraph.HttpAggregators.Management.Api.Controllers.v1.ViewModels.Requests.Users.ActivateBulkTenantUserRequest'
           text/json:
             schema:
-              $ref: '#/components/schemas/EdGraph.HttpAggregators.Management.Api.Controllers.v1.ViewModels.Requests.Users.ActivateBulkTenantUser'
+              $ref: '#/components/schemas/EdGraph.HttpAggregators.Management.Api.Controllers.v1.ViewModels.Requests.Users.ActivateBulkTenantUserRequest'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/EdGraph.HttpAggregators.Management.Api.Controllers.v1.ViewModels.Requests.Users.ActivateBulkTenantUser'
+              $ref: '#/components/schemas/EdGraph.HttpAggregators.Management.Api.Controllers.v1.ViewModels.Requests.Users.ActivateBulkTenantUserRequest'
       responses:
         '401':
           description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
@@ -20486,7 +20486,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IdentityApi.User.V1.UserActivatedResponse'
+                $ref: '#/components/schemas/EdGraph.HttpAggregators.Management.Api.Controllers.v1.ViewModels.Responses.BulkTenantUserResponse'
         '400':
           description: Bad Request. The request was invalid and cannot be completed. See the response body for specific validation errors. This will typically be an issue with the query parameters or the request body values.
           content:
@@ -20604,7 +20604,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IdentityApi.User.V1.UserDeactivatedResponse'
+                $ref: '#/components/schemas/EdGraph.HttpAggregators.Management.Api.Controllers.v1.ViewModels.Responses.BulkTenantUserResponse'
         '400':
           description: Bad Request. The request was invalid and cannot be completed. See the response body for specific validation errors. This will typically be an issue with the query parameters or the request body values.
           content:
@@ -25369,7 +25369,7 @@ components:
         urlType:
           $ref: '#/components/schemas/ApplicationApi.Application.V1.UrlType'
       additionalProperties: false
-    EdGraph.HttpAggregators.Management.Api.Controllers.v1.ViewModels.Requests.Users.ActivateBulkTenantUser:
+    EdGraph.HttpAggregators.Management.Api.Controllers.v1.ViewModels.Requests.Users.ActivateBulkTenantUserRequest:
       type: object
       properties:
         userId:
@@ -25543,6 +25543,34 @@ components:
         type:
           $ref: '#/components/schemas/ApplicationApi.Application.V1.UrlType'
       additionalProperties: false
+    EdGraph.HttpAggregators.Management.Api.Controllers.v1.ViewModels.Responses.BulkTenantUserFailure:
+      type: object
+      properties:
+        tenantId:
+          type: string
+          nullable: true
+        reason:
+          type: string
+          nullable: true
+      additionalProperties: false
+    EdGraph.HttpAggregators.Management.Api.Controllers.v1.ViewModels.Responses.BulkTenantUserResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+          nullable: true
+        succeeded:
+          type: array
+          items:
+            type: string
+          nullable: true
+        failed:
+          type: array
+          items:
+            $ref: '#/components/schemas/EdGraph.HttpAggregators.Management.Api.Controllers.v1.ViewModels.Responses.BulkTenantUserFailure'
+          nullable: true
+      additionalProperties: false
+      description: "Outcome of a bulk activate/deactivate operation. The operation is applied per tenant, so it can\r\npartially succeed; callers must inspect EdGraph.HttpAggregators.Management.Api.Controllers.v1.ViewModels.Responses.BulkTenantUserResponse.Failed rather than assume a 200 means every\r\ntenant was updated."
     EdGraph.HttpAggregators.Management.Api.Controllers.v1.ViewModels.Responses.DomainListResponseDto:
       type: object
       properties:
@@ -31109,6 +31137,16 @@ components:
           type: boolean
         platformRole:
           type: string
+          nullable: true
+        tenantStatus:
+          type: string
+          nullable: true
+        tenantAdmin:
+          type: boolean
+          nullable: true
+        status:
+          type: string
+          description: "The user's status across all their tenants: Active if any membership is active, Inactive if every\r\nmembership is inactive, Unknown if they have no memberships. Unlike tenantStatus this does not\r\ndepend on a tenantId being supplied on the request."
           nullable: true
       additionalProperties: false
       description: Entities
