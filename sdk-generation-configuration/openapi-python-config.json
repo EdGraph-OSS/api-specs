@@ -4,7 +4,7 @@
   "packageVersion": "0.0.53",
   "library": "httpx",
   "gitUserId": "EdGraph-OSS",
-  "gitRepoId": "python-sdk",
+  "gitRepoId": "eg-sdk-python",
   "additionalProperties": {
     "packageAuthor": "EdGraph",
     "packageCompany": "EdWire",
