@@ -10,7 +10,7 @@
   "composerVendorName": "edgraph",
   "composerPackageName": "edgraph/platform-client",
   "gitUserId": "EdGraph-OSS",
-  "gitRepoId": "php-sdk",
+  "gitRepoId": "eg-sdk-php",
   "generatePackageJson": false,
   "generateSourceCodeOnly": false,
   "apiTests": true,

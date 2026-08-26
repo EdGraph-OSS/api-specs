@@ -8,7 +8,7 @@
   "optionalEmitDefaultValues": true,
   "optionalAddApiKeyAuthorization": false,
   "gitUserId": "EdGraph-OSS",
-  "gitRepoId": "csharp-sdk",
+  "gitRepoId": "eg-sdk-csharp",
   "additionalProperties": {
     "packageAuthors": "EdGraph",
     "packageCompany": "EdWire",

@@ -8,10 +8,10 @@
   "generateApiDocumentation": true,
   "generateModelDocumentation": true,
   "gitUserId": "EdGraph-OSS",
-  "gitRepoId": "typescript-sdk",
+  "gitRepoId": "eg-sdk-typescript",
   "additionalProperties": {
     "npmAuthor": "EdGraph",
-    "npmRepository": "https://github.com/EdGraph-OSS/typescript-sdk",
+    "npmRepository": "https://github.com/EdGraph-OSS/eg-sdk-typescript",
     "npmDescription": "EdGraph Platform Client SDK",
     "useSingleRequestParameter": true
   },

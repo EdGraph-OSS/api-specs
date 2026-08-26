@@ -46,20 +46,20 @@ jobs:
       - name: 📄 Print Config file
         run:  jq . ./sdk-generation-configuration/openapi-${{ matrix.planguage.name }}-config.json
 
-      - name: Mint publisher app token for ${{ matrix.planguage.name }}-sdk
+      - name: Mint publisher app token for eg-sdk-${{ matrix.planguage.name }}
         id: sdk-app-token
         uses: actions/create-github-app-token@v2
         with:
           app-id: ${{ vars.PUBLISHER_APP_ID }}
           private-key: ${{ secrets.PUBLISHER_APP_PRIVATE_KEY }}
           owner: EdGraph-OSS
-          repositories: ${{ matrix.planguage.name }}-sdk
+          repositories: eg-sdk-${{ matrix.planguage.name }}
 
       - name: 🧬 Clone ${{ matrix.planguage.name }} SDK Repository
         env:
           TOKEN: ${{ steps.sdk-app-token.outputs.token }}
         run: |
-          git clone https://x-access-token:$TOKEN@github.com/EdGraph-OSS/${{ matrix.planguage.name }}-sdk target
+          git clone https://x-access-token:$TOKEN@github.com/EdGraph-OSS/eg-sdk-${{ matrix.planguage.name }} target
           cd target
           rm -rf ./src
 
