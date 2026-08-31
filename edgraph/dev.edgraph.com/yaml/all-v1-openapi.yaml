@@ -7021,13 +7021,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
-  '/tenants/{tenantId}/enrollmentadmin/contacts/{id}/override-history':
+  '/tenants/{tenantId}/enrollmentadmin/contacts/{id}/overrides':
     get:
       tags:
         - Enrollment Admin / Contacts
       summary: 'Reads a contact''s override history, newest first.'
       description: "<br>\r\n            Eventually consistent. A change reaches the log through Enrollment's outbox, so an entry can\r\n            be a few seconds behind a write that has already succeeded. Render the current value from the\r\n            contact itself and use this for what preceded it.\r\n            \r\n<br>\r\n            One route for both details, unlike the writes: this is a single ordered log and each entry\r\n            names its own detail, so splitting it would mean two requests to render one contact's\r\n            timeline and two page counts to reconcile.\r\n            "
-      operationId: GetEnrollmentContactOverrideHistory
+      operationId: GetEnrollmentContactOverrides
       parameters:
         - name: tenantId
           in: path
@@ -43470,6 +43470,10 @@ components:
     EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.EnrollmentAdmin.ContactStudentResponseDto:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
         studentId:
           type: string
           nullable: true
