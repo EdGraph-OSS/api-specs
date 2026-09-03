@@ -39,7 +39,7 @@ paths:
     delete:
       tags:
         - My Extensions
-      summary: Removes a user's profile extension.
+      summary: "Removes a user's profile extension.\r\n<br><b>Deprecated.</b> Use `/me/settings/{code}` instead. Superseded by\r\nEdGraph.Services.Settings; see docs/settings-deprecation-map.md. This endpoint\r\nstill works and is unchanged."
       operationId: RemoveUserExtension
       parameters:
         - name: code
@@ -79,11 +79,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
+      deprecated: true
   /me/extensions:
     post:
       tags:
         - My Extensions
-      summary: Creates or update a user's profile extension.
+      summary: "Creates or update a user's profile extension.\r\n<br><b>Deprecated.</b> Use `/me/settings` instead. Superseded by\r\nEdGraph.Services.Settings; see docs/settings-deprecation-map.md. This endpoint\r\nstill works and is unchanged."
       operationId: SetUserExtension
       requestBody:
         description: ''
@@ -131,11 +132,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
+      deprecated: true
   '/me/preferences/{code}':
     get:
       tags:
         - My Preferences
-      summary: Retrieves a user's preference by code.
+      summary: "Retrieves a user's preference by code.\r\n<br><b>Deprecated.</b> Use `/me/settings/{code}` instead. Superseded by\r\nEdGraph.Services.Settings; see docs/settings-deprecation-map.md. This endpoint\r\nstill works and is unchanged."
       operationId: Preference
       parameters:
         - name: code
@@ -175,11 +177,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+      deprecated: true
   /me/preferences:
     get:
       tags:
         - My Preferences
-      summary: Retrieves the user's preferences.
+      summary: "Retrieves the user's preferences.\r\n<br><b>Deprecated.</b> Use `/me/settings` instead. Superseded by\r\nEdGraph.Services.Settings; see docs/settings-deprecation-map.md. This endpoint\r\nstill works and is unchanged."
       operationId: GetUserPreferences
       parameters:
         - name: pageIndex
@@ -237,10 +240,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+      deprecated: true
     post:
       tags:
         - My Preferences
-      summary: Creates or update a user's preference.
+      summary: "Creates or update a user's preference.\r\n<br><b>Deprecated.</b> Use `/me/settings` instead. Superseded by\r\nEdGraph.Services.Settings; see docs/settings-deprecation-map.md. This endpoint\r\nstill works and is unchanged."
       operationId: UpdateUserPreferenceAsync
       requestBody:
         description: ''
@@ -288,6 +292,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
+      deprecated: true
   /me:
     get:
       tags:
@@ -332,6 +337,367 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+  '/me/settings/{settingIdOrCode}':
+    delete:
+      tags:
+        - My Settings
+      summary: 'Delete the User-scope setting for a key, addressed by SettingType id or Code'
+      operationId: DeleteMySetting
+      parameters:
+        - name: settingIdOrCode
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.DeleteMySettingRequestBody'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.DeleteMySettingRequestBody'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.DeleteMySettingRequestBody'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.DeleteMySettingRequestBody'
+      responses:
+        '401':
+          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '403':
+          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '500':
+          description: An unhandled error occurred on the server.See the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '422':
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+    get:
+      tags:
+        - My Settings
+      summary: Get a User-scope setting
+      description: "Answers with the stored record alone. Effective-value resolution is opt-in: pass\r\n`resolveEffectiveValue=true` to instead receive the value in force at this scope — every\r\nlayer above it merged under the setting's own value."
+      operationId: GetMySetting
+      parameters:
+        - name: settingIdOrCode
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: settingTypeId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: provider
+          in: query
+          schema:
+            type: string
+        - name: applicationId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: resolveEffectiveValue
+          in: query
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '401':
+          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '403':
+          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '500':
+          description: An unhandled error occurred on the server.See the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SettingsApi.UserSettings.V1.UserSettingMessage'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '422':
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+    put:
+      tags:
+        - My Settings
+      summary: 'Update the User-scope setting for a key, addressed by SettingType id or Code'
+      operationId: UpdateMySetting
+      parameters:
+        - name: settingIdOrCode
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.UpdateMySettingRequestBody'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.UpdateMySettingRequestBody'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.UpdateMySettingRequestBody'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.UpdateMySettingRequestBody'
+      responses:
+        '401':
+          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '403':
+          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '500':
+          description: An unhandled error occurred on the server.See the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '422':
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+  /me/settings:
+    get:
+      tags:
+        - My Settings
+      summary: List User-scope settings
+      operationId: SearchMySettings
+      parameters:
+        - name: applicationId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: settingTypeId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: pageIndex
+          in: query
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+            default: 10
+        - name: orderBy
+          in: query
+          schema:
+            type: string
+            default: ''
+        - name: filter
+          in: query
+          schema:
+            type: string
+            default: ''
+      responses:
+        '401':
+          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '403':
+          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '500':
+          description: An unhandled error occurred on the server.See the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SettingsApi.UserSettings.V1.SearchUserSettingsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
+    post:
+      tags:
+        - My Settings
+      summary: Create a User-scope setting
+      operationId: CreateMySetting
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.CreateMySettingRequestBody'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.CreateMySettingRequestBody'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.CreateMySettingRequestBody'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.CreateMySettingRequestBody'
+      responses:
+        '401':
+          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '403':
+          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '500':
+          description: An unhandled error occurred on the server.See the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SettingsApi.UserSettings.V1.CreateUserSettingResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
+    put:
+      tags:
+        - My Settings
+      summary: 'Create or update (upsert) a User-scope setting, addressed by the SettingTypeId in the body'
+      operationId: SetMySetting
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.SetMySettingRequestBody'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.SetMySettingRequestBody'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.SetMySettingRequestBody'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.SetMySettingRequestBody'
+      responses:
+        '401':
+          description: Unauthorized. The request requires authentication. The OAuth bearer token was either not provided or is invalid. The operation may succeed once authentication has been successfully completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '403':
+          description: Forbidden. The request cannot be completed in the current authorization context. Contact your administrator if you believe this operation should be allowed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '500':
+          description: An unhandled error occurred on the server.See the response body for details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SettingsApi.UserSettings.V1.SetUserSettingResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
   /me/tenants:
     get:
       tags:
@@ -434,6 +800,89 @@ components:
           nullable: true
         value:
           type: string
+          nullable: true
+      additionalProperties: false
+    EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.CreateMySettingRequestBody:
+      type: object
+      properties:
+        settingId:
+          type: string
+          format: uuid
+          nullable: true
+        settingTypeId:
+          type: string
+          format: uuid
+          nullable: true
+        provider:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        applicationId:
+          type: string
+          format: uuid
+          nullable: true
+        value:
+          nullable: true
+      additionalProperties: false
+    EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.DeleteMySettingRequestBody:
+      type: object
+      properties:
+        settingTypeId:
+          type: string
+          format: uuid
+          nullable: true
+        provider:
+          type: string
+          nullable: true
+        applicationId:
+          type: string
+          format: uuid
+          nullable: true
+        reason:
+          type: string
+          nullable: true
+      additionalProperties: false
+    EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.SetMySettingRequestBody:
+      type: object
+      properties:
+        settingId:
+          type: string
+          format: uuid
+          nullable: true
+        settingTypeId:
+          type: string
+          format: uuid
+          nullable: true
+        provider:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        applicationId:
+          type: string
+          format: uuid
+          nullable: true
+        value:
+          nullable: true
+      additionalProperties: false
+    EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.UpdateMySettingRequestBody:
+      type: object
+      properties:
+        settingTypeId:
+          type: string
+          format: uuid
+          nullable: true
+        provider:
+          type: string
+          nullable: true
+        applicationId:
+          type: string
+          format: uuid
+          nullable: true
+        value:
           nullable: true
       additionalProperties: false
     EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.UserCacheResponse:
@@ -588,6 +1037,72 @@ components:
           description: "Maps to EdGraph.Platform.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Responses.LicenseSource.<br></br>\r\n\r\nFor more info see: Task 9962: Modify implicit license response to prioritize explicit licenses over implicit (part 2) (https://dev.azure.com/edwire/EW.Educate/_workitems/edit/9962)"
           nullable: true
       additionalProperties: false
+    Google.Protobuf.WellKnownTypes.ListValue:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/Google.Protobuf.WellKnownTypes.Value'
+          nullable: true
+          readOnly: true
+      additionalProperties: false
+    Google.Protobuf.WellKnownTypes.NullValue:
+      enum:
+        - NullValue
+      type: string
+    Google.Protobuf.WellKnownTypes.Struct:
+      type: object
+      properties:
+        fields:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Google.Protobuf.WellKnownTypes.Value'
+          nullable: true
+          readOnly: true
+      additionalProperties: false
+    Google.Protobuf.WellKnownTypes.Value:
+      type: object
+      properties:
+        nullValue:
+          $ref: '#/components/schemas/Google.Protobuf.WellKnownTypes.NullValue'
+        hasNullValue:
+          type: boolean
+          readOnly: true
+        numberValue:
+          type: number
+          format: double
+        hasNumberValue:
+          type: boolean
+          readOnly: true
+        stringValue:
+          type: string
+          nullable: true
+        hasStringValue:
+          type: boolean
+          readOnly: true
+        boolValue:
+          type: boolean
+        hasBoolValue:
+          type: boolean
+          readOnly: true
+        structValue:
+          $ref: '#/components/schemas/Google.Protobuf.WellKnownTypes.Struct'
+        listValue:
+          $ref: '#/components/schemas/Google.Protobuf.WellKnownTypes.ListValue'
+        kindCase:
+          $ref: '#/components/schemas/Google.Protobuf.WellKnownTypes.Value+KindOneofCase'
+      additionalProperties: false
+    Google.Protobuf.WellKnownTypes.Value+KindOneofCase:
+      enum:
+        - None
+        - NullValue
+        - NumberValue
+        - StringValue
+        - BoolValue
+        - StructValue
+        - ListValue
+      type: string
     IdentityApi.User.V1.GetUserPreferencesResponse:
       type: object
       properties:
@@ -852,6 +1367,75 @@ components:
           type: string
           nullable: true
       additionalProperties: { }
+    SettingsApi.UserSettings.V1.CreateUserSettingResponse:
+      type: object
+      properties:
+        settingId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    SettingsApi.UserSettings.V1.SearchUserSettingsResponse:
+      type: object
+      properties:
+        pageIndex:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        count:
+          type: integer
+          format: int64
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SettingsApi.UserSettings.V1.UserSettingMessage'
+          nullable: true
+          readOnly: true
+      additionalProperties: false
+    SettingsApi.UserSettings.V1.SetUserSettingResponse:
+      type: object
+      properties:
+        settingId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    SettingsApi.UserSettings.V1.UserSettingMessage:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        settingTypeId:
+          type: string
+          nullable: true
+        applicationId:
+          type: string
+          nullable: true
+        schemaVersion:
+          type: string
+          nullable: true
+        value:
+          $ref: '#/components/schemas/Google.Protobuf.WellKnownTypes.Value'
+        createdBy:
+          type: string
+          nullable: true
+        createdDateTime:
+          type: string
+          nullable: true
+        lastModifiedBy:
+          type: string
+          nullable: true
+        lastModifiedDateTime:
+          type: string
+          nullable: true
+        provider:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
   securitySchemes:
     oauth2:
       type: oauth2

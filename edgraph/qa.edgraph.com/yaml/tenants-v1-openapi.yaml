@@ -2997,7 +2997,7 @@ paths:
     get:
       tags:
         - Settings
-      summary: Retrieves a Tenant's settings by code.
+      summary: "Retrieves a Tenant's settings by code.\r\n<br><b>Deprecated.</b> Use `/v2/tenants/{tenantId}/settings/{code}` instead. Superseded by\r\nEdGraph.Services.Settings; see docs/settings-deprecation-map.md. This endpoint\r\nstill works and is unchanged."
       operationId: GetTenantSettingsByCode
       parameters:
         - name: tenantId
@@ -3044,10 +3044,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
+      deprecated: true
     post:
       tags:
         - Settings
-      summary: Creates/updates a Tenant's settings.
+      summary: "Creates/updates a Tenant's settings.\r\n<br><b>Deprecated.</b> Use `/v2/tenants/{tenantId}/settings` instead. Superseded by\r\nEdGraph.Services.Settings; see docs/settings-deprecation-map.md. This endpoint\r\nstill works and is unchanged."
       operationId: SetTenantSettings
       parameters:
         - name: tenantId
@@ -3115,11 +3116,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/EdGraph.Common.Errors.Core.ProblemDetails'
+      deprecated: true
   '/tenants/{tenantId}/settings':
     get:
       tags:
         - Settings
-      summary: Retrieves a list of the Tenant's settings.
+      summary: "Retrieves a list of the Tenant's settings.\r\n<br><b>Deprecated.</b> Use `/v2/tenants/{tenantId}/settings` instead. Superseded by\r\nEdGraph.Services.Settings; see docs/settings-deprecation-map.md. This endpoint\r\nstill works and is unchanged."
       operationId: GetTenantSettings
       parameters:
         - name: tenantId
@@ -3186,6 +3188,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails'
+      deprecated: true
   '/tenants/{tenantId}/staffclassifications/{staffClassificationId}':
     delete:
       tags:
@@ -8403,6 +8406,7 @@ components:
           items:
             $ref: '#/components/schemas/EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Requests.Tenants.TenantSetting'
           nullable: true
+          deprecated: true
       additionalProperties: false
     EdGraph.HttpAggregators.Tenant.Api.Controllers.v1.ViewModels.Requests.UpdateOnboardingStepRequestDto:
       type: object
@@ -9682,6 +9686,7 @@ components:
             $ref: '#/components/schemas/IdentityApi.ClientSettingsType.V1.ClientSettingsTypeResponse'
           nullable: true
           readOnly: true
+          deprecated: true
       additionalProperties: false
     IdentityApi.InstructionalInsights.V1.CallbackNotificationMessage:
       type: object
@@ -11843,6 +11848,7 @@ components:
             $ref: '#/components/schemas/TenantApi.Tenant.V1.TenantAppSettings'
           nullable: true
           readOnly: true
+          deprecated: true
         pageIndex:
           type: integer
           format: int32
@@ -12282,6 +12288,7 @@ components:
             $ref: '#/components/schemas/TenantApi.Tenant.V1.TenantSetting'
           nullable: true
           readOnly: true
+          deprecated: true
         additionalSettings:
           $ref: '#/components/schemas/TenantApi.Tenant.V1.TenantAdditionalSetting'
         tenantType:
@@ -12372,6 +12379,7 @@ components:
             $ref: '#/components/schemas/TenantApi.Tenant.V1.TenantSettingsTypeAttribute'
           nullable: true
           readOnly: true
+          deprecated: true
       additionalProperties: false
     TenantApi.Tenant.V1.TenantSettingTypesListResponsePaginatedItemsViewModel:
       type: object
